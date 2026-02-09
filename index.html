@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Éditeur vidéo web - Index unique</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      padding: 12px 20px;
+      background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%);
+      border-bottom: 1px solid #0b1120;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header .title {
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+    header .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: 0;
+    }
+    aside {
+      border-right: 1px solid #020617;
+      background: #020617;
+      padding: 14px 14px 18px;
+      font-size: 13px;
+      overflow-y: auto;
+    }
+    .panel {
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      padding: 10px 10px 12px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+      margin-bottom: 10px;
+    }
+    .panel h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3af;
+      margin: 0 0 6px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #9ca3af;
+    }
+    input[type="file"],
+    input[type="text"],
+    select {
+      width: 100%;
+      font-size: 13px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      outline: none;
+    }
+    input[type="color"] {
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      width: 40px;
+      height: 24px;
+      cursor: pointer;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .row > div { flex: 1; }
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    button {
+      border-radius: 999px;
+      border: 1px solid #1d4ed8;
+      background: #1d4ed8;
+      color: #e5e7eb;
+      font-size: 12px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+      transition: transform 0.08s, box-shadow 0.08s, filter 0.08s;
+    }
+    button.secondary {
+      background: #020617;
+      border-color: #374151;
+      box-shadow: none;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.6);
+    }
+    button.secondary:hover {
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
+    }
+    section.preview {
+      padding: 12px 16px 16px;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .preview-toolbar .controls button {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      box-shadow: none;
+      border-color: #374151;
+      background: #020617;
+    }
+    .preview-toolbar .controls button:hover {
+      background: #111827;
+    }
+    .video-zone {
+      display: flex;
+      gap: 12px;
+      min-height: 0;
+    }
+    .video-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+    video, canvas {
+      width: 100%;
+      max-height: 70vh;
+      background: #000;
+      border-radius: 10px;
+      border: 1px solid #020617;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+    }
+    .pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+    }
+    footer {
+      font-size: 11px;
+      color: #9ca3af;
+      border-top: 1px solid #020617;
+      background: #020617;
+      padding: 4px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #status { color: #e5e7eb; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">Éditeur vidéo web • Index unique</div>
+    <div class="badge">Import vidéo • Texte overlay • Export WebM</div>
+  </header>
+
+  <main>
+    <aside>
+      <div class="panel">
+        <h2>Source vidéo</h2>
+        <label for="file-input">Importer une vidéo locale</label>
+        <input type="file" id="file-input" accept="video/*" />
+        <div class="hint">
+          La vidéo reste sur ton appareil, tout est traité dans ton navigateur.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Texte overlay</h2>
+        <label for="overlay-text">Texte</label>
+        <input type="text" id="overlay-text" value="Mon texte premium" />
+
+        <div class="row">
+          <div>
+            <label for="font-size">Taille</label>
+            <input type="range" id="font-size" min="16" max="96" value="40" />
+          </div>
+          <div>
+            <label for="text-color">Couleur</label>
+            <input type="color" id="text-color" value="#ffffff" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="pos-x">Position X (%)</label>
+            <input type="range" id="pos-x" min="0" max="100" value="10" />
+          </div>
+          <div>
+            <label for="pos-y">Position Y (%)</label>
+            <input type="range" id="pos-y" min="0" max="100" value="80" />
+          </div>
+        </div>
+
+        <label for="font-family">Police</label>
+        <select id="font-family">
+          <option value="system-ui">System</option>
+          <option value="Arial">Arial</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Courier New">Courier New</option>
+        </select>
+
+        <div class="hint">
+          Le texte sera dessiné directement sur chaque frame de la vidéo exportée.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Export</h2>
+        <div class="hint">
+          L’export enregistre tout le flux vidéo + texte dans un fichier <b>.webm</b>.
+        </div>
+        <div class="buttons">
+          <button id="btn-preview"><span>▶</span> Prévisualiser dans le canvas</button>
+          <button id="btn-export" class="secondary"><span>⬇</span> Exporter la vidéo complète</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="preview">
+      <div class="preview-toolbar">
+        <div class="controls">
+          <button id="btn-play-pause">Lecture</button>
+          <button id="btn-reset" class="secondary">Revenir au début</button>
+        </div>
+        <div>
+          <span class="pill" id="info-resolution">Aucune vidéo chargée</span>
+        </div>
+      </div>
+
+      <div class="video-zone">
+        <div class="video-col">
+          <label>Vidéo originale</label>
+          <video id="video" controls></video>
+        </div>
+        <div class="video-col">
+          <label>Rendu avec texte (canvas)</label>
+          <canvas id="canvas"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>Projet : index.html unique</div>
+    <div id="status">Prêt.</div>
+  </footer>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const overlayInput = document.getElementById('overlay-text');
+    const fontSizeInput = document.getElementById('font-size');
+    const textColorInput = document.getElementById('text-color');
+    const posXInput = document.getElementById('pos-x');
+    const posYInput = document.getElementById('pos-y');
+    const fontFamilySelect = document.getElementById('font-family');
+
+    const btnPreview = document.getElementById('btn-preview');
+    const btnExport = document.getElementById('btn-export');
+    const btnPlayPause = document.getElementById('btn-play-pause');
+    const btnReset = document.getElementById('btn-reset');
+    const statusEl = document.getElementById('status');
+    const infoRes = document.getElementById('info-resolution');
+
+    let isRendering = false;
+    let isRecording = false;
+    let recorder = null;
+    let recordedChunks = [];
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      video.src = url;
+      video.onloadedmetadata = () => {
+        infoRes.textContent = `${video.videoWidth}x${video.videoHeight} • ${Math.round(video.duration)} s`;
+        setupCanvas();
+      };
+      statusEl.textContent = 'Vidéo chargée.';
+    });
+
+    function setupCanvas() {
+      if (video.videoWidth && video.videoHeight) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+      }
+    }
+
+    function drawFrame() {
+      if (!isRendering) return;
+      if (video.readyState >= 2) {
+        if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+          setupCanvas();
+        }
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const text = overlayInput.value;
+        const fontSize = parseInt(fontSizeInput.value, 10);
+        const color = textColorInput.value;
+        const fontFamily = fontFamilySelect.value;
+
+        const xPercent = parseInt(posXInput.value, 10) / 100;
+        const yPercent = parseInt(posYInput.value, 10) / 100;
+
+        const x = canvas.width * xPercent;
+        const y = canvas.height * yPercent;
+
+        ctx.font = `${fontSize}px ${fontFamily}`;
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'left';
+
+        ctx.lineWidth = Math.max(2, fontSize / 15);
+        ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+        ctx.strokeText(text, x, y);
+
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y);
+      }
+      requestAnimationFrame(drawFrame);
+    }
+
+    btnPreview.addEventListener('click', () => {
+      if (!video.src) {
+        alert('Importe d’abord une vidéo.');
+        return;
+      }
+      statusEl.textContent = 'Prévisualisation en cours…';
+      isRendering = true;
+      if (video.paused) video.play();
+      drawFrame();
+    });
+
+    btnPlayPause.addEventListener('click', () => {
+      if (!video.src) return;
+      if (video.paused) {
+        video.play();
+        btnPlayPause.textContent = 'Pause';
+        statusEl.textContent = 'Lecture vidéo…';
+      } else {
+        video.pause();
+        btnPlayPause.textContent = 'Lecture';
+        statusEl.textContent = 'Vidéo en pause.';
+      }
+    });
+
+    btnReset.addEventListener('click', () => {
+      if (!video.src) return;
+      video.currentTime = 0;
+      statusEl.textContent = 'Revenu au début.';
+    });
+
+    btnExport.addEventListener('click', async () => {
+      if (!video.src) {
+        alert('Importe d’abord une vidéo.');
+        return;
+      }
+      if (!canvas.captureStream) {
+        alert("Ton navigateur ne supporte pas la capture du canvas.");
+        return;
+      }
+
+      statusEl.textContent = 'Préparation de l’export…';
+
+      setupCanvas();
+
+      const stream = canvas.captureStream(30); // 30 fps
+      recordedChunks = [];
+      try {
+        recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+      } catch (e) {
+        try {
+          recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        } catch (err) {
+          alert("Impossible de créer un MediaRecorder pour ce navigateur.");
+          return;
+        }
+      }
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'export_overlay.webm';
+        a.click();
+        URL.revokeObjectURL(url);
+        statusEl.textContent = 'Export terminé.';
+        isRecording = false;
+      };
+
+      video.currentTime = 0;
+      await video.play();
+
+      isRendering = true;
+      isRecording = true;
+      drawFrame();
+      recorder.start();
+      statusEl.textContent = 'Export en cours (enregistre toute la vidéo)…';
+
+      const onEnded = () => {
+        if (isRecording && recorder && recorder.state === 'recording') {
+          recorder.stop();
+        }
+        isRendering = false;
+        video.removeEventListener('ended', onEnded);
+      };
+      video.addEventListener('ended', onEnded);
+    });
+  </script>
+</body>
+</html>
