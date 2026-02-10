@@ -2,479 +2,774 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Éditeur vidéo web - Index unique</title>
+  <title>Chiffreur de fichiers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * { box-sizing: border-box; }
-    body {
+    :root {
+      --bg: #050816;
+      --bg-panel: #0f172a;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.15);
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --danger: #f97373;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #020617;
-      color: #e5e7eb;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+      background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border-radius: 24px;
+      box-shadow:
+        0 24px 80px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(148,163,184,0.15);
+      padding: 20px 20px 24px;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      gap: 18px;
     }
-    header {
-      padding: 12px 20px;
-      background: radial-gradient(circle at top left, #1d4ed8 0, #020617 55%);
-      border-bottom: 1px solid #0b1120;
+
+    @media (min-width: 720px) {
+      .app {
+        padding: 26px 28px 30px;
+        gap: 22px;
+      }
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-    header .title {
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-size: 14px;
-    }
-    header .badge {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-    }
-    main {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      min-height: 0;
-    }
-    aside {
-      border-right: 1px solid #020617;
-      background: #020617;
-      padding: 14px 14px 18px;
-      font-size: 13px;
-      overflow-y: auto;
-    }
-    .panel {
-      background: #020617;
-      border-radius: 10px;
-      border: 1px solid #111827;
-      padding: 10px 10px 12px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-      margin-bottom: 10px;
-    }
-    .panel h2 {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #9ca3af;
-      margin: 0 0 6px;
-    }
-    label {
-      display: block;
-      font-size: 12px;
-      margin-bottom: 4px;
-      color: #9ca3af;
-    }
-    input[type="file"],
-    input[type="text"],
-    select {
-      width: 100%;
-      font-size: 13px;
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      outline: none;
-    }
-    input[type="color"] {
-      padding: 0;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      width: 40px;
-      height: 24px;
-      cursor: pointer;
-    }
-    input[type="range"] {
-      width: 100%;
-    }
-    .row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .row > div { flex: 1; }
-    .hint {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 4px;
-    }
-    .buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
-    button {
-      border-radius: 999px;
-      border: 1px solid #1d4ed8;
-      background: #1d4ed8;
-      color: #e5e7eb;
-      font-size: 12px;
-      padding: 6px 14px;
-      cursor: pointer;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
-      transition: transform 0.08s, box-shadow 0.08s, filter 0.08s;
-    }
-    button.secondary {
-      background: #020617;
-      border-color: #374151;
-      box-shadow: none;
-    }
-    button:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.05);
-      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.6);
-    }
-    button.secondary:hover {
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
-    }
-    section.preview {
-      padding: 12px 16px 16px;
-      background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 0;
-    }
-    .preview-toolbar {
+
+    h1 {
+      font-size: 1.4rem;
+      letter-spacing: 0.03em;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: #9ca3af;
-    }
-    .preview-toolbar .controls button {
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 12px;
-      box-shadow: none;
-      border-color: #374151;
-      background: #020617;
-    }
-    .preview-toolbar .controls button:hover {
-      background: #111827;
-    }
-    .video-zone {
-      display: flex;
-      gap: 12px;
-      min-height: 0;
-    }
-    .video-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
       gap: 8px;
-      min-height: 0;
     }
-    video, canvas {
-      width: 100%;
-      max-height: 70vh;
-      background: #000;
-      border-radius: 10px;
-      border: 1px solid #020617;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
-    }
-    .pill {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #0f172a;
-      border: 1px solid #1f2937;
-      font-size: 10px;
+
+    .badge {
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #9ca3af;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      color: var(--text-soft);
     }
-    footer {
-      font-size: 11px;
-      color: #9ca3af;
-      border-top: 1px solid #020617;
-      background: #020617;
-      padding: 4px 10px;
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      max-width: 520px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 720px) {
+      .grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 18px;
+      }
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.12), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(129,140,248,0.12), transparent 55%),
+                  var(--bg-panel);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid rgba(148,163,184,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 720px) {
+      .panel {
+        padding: 16px 16px 18px;
+      }
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 60%);
+      opacity: 0.4;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .dropzone {
+      border-radius: 14px;
+      border: 1px dashed rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.85);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.12s ease;
+    }
+
+    .dropzone:hover {
+      border-color: var(--accent);
+      background: rgba(15,23,42,0.95);
+      transform: translateY(-1px);
+    }
+
+    .dropzone.dragover {
+      border-color: var(--accent);
+      background: rgba(15,23,42,1);
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+    }
+
+    .drop-main {
+      font-size: 0.9rem;
+    }
+
+    .drop-main span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .drop-sub {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .file-info {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .file-name {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-size {
+      opacity: 0.8;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label {
+      font-size: 0.8rem;
+      color: var(--text-soft);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
     }
-    #status { color: #e5e7eb; }
+
+    .field-label span {
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+
+    .input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+      background: rgba(15,23,42,1);
+    }
+
+    .input::placeholder {
+      color: rgba(148,163,184,0.8);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s ease, opacity 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #0b1120;
+      box-shadow:
+        0 10px 30px rgba(56,189,248,0.45),
+        0 0 0 1px rgba(15,23,42,0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 14px 40px rgba(56,189,248,0.55),
+        0 0 0 1px rgba(15,23,42,0.9);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow:
+        0 6px 18px rgba(56,189,248,0.4),
+        0 0 0 1px rgba(15,23,42,0.9);
+    }
+
+    .btn-ghost {
+      background: rgba(15,23,42,0.9);
+      color: var(--text-soft);
+      border: 1px solid rgba(148,163,184,0.5);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15,23,42,1);
+      color: var(--text);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .status {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      min-height: 1.1em;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.success {
+      color: #4ade80;
+    }
+
+    .progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      overflow: hidden;
+      border: 1px solid rgba(30,64,175,0.8);
+    }
+
+    .progress-inner {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #38bdf8, #6366f1);
+      transition: width 0.15s ease;
+    }
+
+    .progress-label {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.7rem;
+    }
+
+    .chip {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.4);
+      color: var(--text-soft);
+    }
+
+    .chip-accent {
+      border-color: rgba(56,189,248,0.7);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .meta {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-key {
+      opacity: 0.8;
+    }
+
+    .meta-value {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.75rem;
+      color: #e0f2fe;
+    }
+
+    .footer {
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(30,64,175,0.6);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
+    .footer span {
+      opacity: 0.9;
+    }
+
+    .footer strong {
+      font-weight: 600;
+      color: #e0f2fe;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="title">Éditeur vidéo web • Index unique</div>
-    <div class="badge">Import vidéo • Texte overlay • Export WebM</div>
-  </header>
-
-  <main>
-    <aside>
-      <div class="panel">
-        <h2>Source vidéo</h2>
-        <label for="file-input">Importer une vidéo locale</label>
-        <input type="file" id="file-input" accept="video/*" />
-        <div class="hint">
-          La vidéo reste sur ton appareil, tout est traité dans ton navigateur.
-        </div>
+  <div class="app">
+    <header class="header">
+      <div class="title-row">
+        <h1>
+          🔐 Chiffreur de fichiers
+          <span class="badge">Client‑side • Aucune donnée envoyée</span>
+        </h1>
       </div>
+      <p class="subtitle">
+        Dépose un fichier, choisis un mot de passe, et récupère une copie chiffrée. L’original reste intact sur ton disque.
+      </p>
+    </header>
 
-      <div class="panel">
-        <h2>Texte overlay</h2>
-        <label for="overlay-text">Texte</label>
-        <input type="text" id="overlay-text" value="Mon texte premium" />
+    <main class="grid">
+      <!-- Colonne gauche : sélection + paramètres -->
+      <section class="panel">
+        <div class="panel-inner">
+          <div class="panel-title">Fichier &amp; mot de passe</div>
 
-        <div class="row">
-          <div>
-            <label for="font-size">Taille</label>
-            <input type="range" id="font-size" min="16" max="96" value="40" />
+          <label class="dropzone" id="dropzone">
+            <input type="file" id="fileInput" class="file-input" />
+            <div class="drop-main">
+              <span>Cliquer pour choisir</span> ou déposer un fichier ici
+            </div>
+            <div class="drop-sub">
+              Tous types acceptés (mp4, jpg, pdf, docx, zip, etc.)
+            </div>
+          </label>
+
+          <div class="file-info" id="fileInfo" style="display:none;">
+            <div class="file-name" id="fileName"></div>
+            <div class="file-size" id="fileSize"></div>
           </div>
-          <div>
-            <label for="text-color">Couleur</label>
-            <input type="color" id="text-color" value="#ffffff" />
+
+          <div class="field">
+            <div class="field-label">
+              Mot de passe
+              <span>Utilisé pour dériver la clé de chiffrement</span>
+            </div>
+            <input
+              type="password"
+              id="passwordInput"
+              class="input"
+              placeholder="Choisis un mot de passe solide"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn btn-ghost" id="clearBtn">
+              Réinitialiser
+            </button>
+            <button type="button" class="btn btn-primary" id="encryptBtn">
+              Chiffrer &amp; télécharger la copie
+            </button>
+          </div>
+
+          <div class="status" id="status"></div>
+        </div>
+      </section>
+
+      <!-- Colonne droite : progression + métadonnées -->
+      <section class="panel">
+        <div class="panel-inner">
+          <div class="panel-title">Progression &amp; détails</div>
+
+          <div class="progress-wrap">
+            <div class="progress-bar">
+              <div class="progress-inner" id="progressBar"></div>
+            </div>
+            <div class="progress-label">
+              <span id="progressLabel">En attente…</span>
+              <span id="progressPercent">0%</span>
+            </div>
+          </div>
+
+          <div class="chip-row">
+            <div class="chip chip-accent">AES‑GCM 256 bits</div>
+            <div class="chip">Clé dérivée via PBKDF2</div>
+            <div class="chip">Tout se passe dans ton navigateur</div>
+          </div>
+
+          <div class="meta">
+            <div class="meta-row">
+              <span class="meta-key">Nom de sortie</span>
+              <span class="meta-value" id="metaOutputName">—</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">Taille chiffrée</span>
+              <span class="meta-value" id="metaOutputSize">—</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">Sel &amp; IV</span>
+              <span class="meta-value" id="metaSaltIv">—</span>
+            </div>
           </div>
         </div>
+      </section>
+    </main>
 
-        <div class="row">
-          <div>
-            <label for="pos-x">Position X (%)</label>
-            <input type="range" id="pos-x" min="0" max="100" value="10" />
-          </div>
-          <div>
-            <label for="pos-y">Position Y (%)</label>
-            <input type="range" id="pos-y" min="0" max="100" value="80" />
-          </div>
-        </div>
-
-        <label for="font-family">Police</label>
-        <select id="font-family">
-          <option value="system-ui">System</option>
-          <option value="Arial">Arial</option>
-          <option value="Helvetica">Helvetica</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Courier New">Courier New</option>
-        </select>
-
-        <div class="hint">
-          Le texte sera dessiné directement sur chaque frame de la vidéo exportée.
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>Export</h2>
-        <div class="hint">
-          L’export enregistre tout le flux vidéo + texte dans un fichier <b>.webm</b>.
-        </div>
-        <div class="buttons">
-          <button id="btn-preview"><span>▶</span> Prévisualiser dans le canvas</button>
-          <button id="btn-export" class="secondary"><span>⬇</span> Exporter la vidéo complète</button>
-        </div>
-      </div>
-    </aside>
-
-    <section class="preview">
-      <div class="preview-toolbar">
-        <div class="controls">
-          <button id="btn-play-pause">Lecture</button>
-          <button id="btn-reset" class="secondary">Revenir au début</button>
-        </div>
-        <div>
-          <span class="pill" id="info-resolution">Aucune vidéo chargée</span>
-        </div>
-      </div>
-
-      <div class="video-zone">
-        <div class="video-col">
-          <label>Vidéo originale</label>
-          <video id="video" controls></video>
-        </div>
-        <div class="video-col">
-          <label>Rendu avec texte (canvas)</label>
-          <canvas id="canvas"></canvas>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div>Projet : index.html unique</div>
-    <div id="status">Prêt.</div>
-  </footer>
+    <footer class="footer">
+      <span>Le fichier original n’est jamais modifié, seule une copie chiffrée est générée.</span>
+      <span><strong>Tip :</strong> garde ton mot de passe, sans lui le fichier est perdu.</span>
+    </footer>
+  </div>
 
   <script>
-    const fileInput = document.getElementById('file-input');
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    // --- Helpers UI ---
+    const fileInput = document.getElementById("fileInput");
+    const dropzone = document.getElementById("dropzone");
+    const fileInfo = document.getElementById("fileInfo");
+    const fileNameEl = document.getElementById("fileName");
+    const fileSizeEl = document.getElementById("fileSize");
+    const passwordInput = document.getElementById("passwordInput");
+    const encryptBtn = document.getElementById("encryptBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const statusEl = document.getElementById("status");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressPercent = document.getElementById("progressPercent");
+    const metaOutputName = document.getElementById("metaOutputName");
+    const metaOutputSize = document.getElementById("metaOutputSize");
+    const metaSaltIv = document.getElementById("metaSaltIv");
 
-    const overlayInput = document.getElementById('overlay-text');
-    const fontSizeInput = document.getElementById('font-size');
-    const textColorInput = document.getElementById('text-color');
-    const posXInput = document.getElementById('pos-x');
-    const posYInput = document.getElementById('pos-y');
-    const fontFamilySelect = document.getElementById('font-family');
+    let selectedFile = null;
 
-    const btnPreview = document.getElementById('btn-preview');
-    const btnExport = document.getElementById('btn-export');
-    const btnPlayPause = document.getElementById('btn-play-pause');
-    const btnReset = document.getElementById('btn-reset');
-    const statusEl = document.getElementById('status');
-    const infoRes = document.getElementById('info-resolution');
+    function formatBytes(bytes) {
+      if (bytes === 0) return "0 o";
+      const k = 1024;
+      const sizes = ["o", "Ko", "Mo", "Go", "To"];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    }
 
-    let isRendering = false;
-    let isRecording = false;
-    let recorder = null;
-    let recordedChunks = [];
+    function setStatus(message, type = "") {
+      statusEl.textContent = message || "";
+      statusEl.className = "status" + (type ? " " + type : "");
+    }
 
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
+    function setProgress(p, label) {
+      const clamped = Math.max(0, Math.min(100, p));
+      progressBar.style.width = clamped + "%";
+      progressPercent.textContent = clamped.toFixed(0) + "%";
+      if (label) progressLabel.textContent = label;
+    }
+
+    function resetUI(full = false) {
+      if (full) {
+        selectedFile = null;
+        fileInput.value = "";
+        fileInfo.style.display = "none";
+        fileNameEl.textContent = "";
+        fileSizeEl.textContent = "";
+        passwordInput.value = "";
+        metaOutputName.textContent = "—";
+        metaOutputSize.textContent = "—";
+        metaSaltIv.textContent = "—";
+      }
+      setStatus("");
+      setProgress(0, "En attente…");
+    }
+
+    function handleFile(file) {
       if (!file) return;
-      const url = URL.createObjectURL(file);
-      video.src = url;
-      video.onloadedmetadata = () => {
-        infoRes.textContent = `${video.videoWidth}x${video.videoHeight} • ${Math.round(video.duration)} s`;
-        setupCanvas();
-      };
-      statusEl.textContent = 'Vidéo chargée.';
-    });
-
-    function setupCanvas() {
-      if (video.videoWidth && video.videoHeight) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-      }
+      selectedFile = file;
+      fileInfo.style.display = "flex";
+      fileNameEl.textContent = file.name;
+      fileSizeEl.textContent = formatBytes(file.size);
+      setStatus("");
+      setProgress(0, "Fichier prêt à être chiffré");
     }
 
-    function drawFrame() {
-      if (!isRendering) return;
-      if (video.readyState >= 2) {
-        if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-          setupCanvas();
-        }
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // --- Drag & drop ---
+    dropzone.addEventListener("click", () => fileInput.click());
 
-        const text = overlayInput.value;
-        const fontSize = parseInt(fontSizeInput.value, 10);
-        const color = textColorInput.value;
-        const fontFamily = fontFamilySelect.value;
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      handleFile(file);
+    });
 
-        const xPercent = parseInt(posXInput.value, 10) / 100;
-        const yPercent = parseInt(posYInput.value, 10) / 100;
+    ["dragenter", "dragover"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add("dragover");
+      });
+    });
 
-        const x = canvas.width * xPercent;
-        const y = canvas.height * yPercent;
+    ["dragleave", "drop"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove("dragover");
+      });
+    });
 
-        ctx.font = `${fontSize}px ${fontFamily}`;
-        ctx.textBaseline = 'middle';
-        ctx.textAlign = 'left';
+    dropzone.addEventListener("drop", (e) => {
+      const dt = e.dataTransfer;
+      const file = dt.files && dt.files[0];
+      handleFile(file);
+    });
 
-        ctx.lineWidth = Math.max(2, fontSize / 15);
-        ctx.strokeStyle = 'rgba(0,0,0,0.8)';
-        ctx.strokeText(text, x, y);
+    // --- Crypto helpers (Web Crypto) ---
+    async function getKeyFromPassword(password, salt) {
+      const enc = new TextEncoder();
+      const keyMaterial = await crypto.subtle.importKey(
+        "raw",
+        enc.encode(password),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
 
-        ctx.fillStyle = color;
-        ctx.fillText(text, x, y);
-      }
-      requestAnimationFrame(drawFrame);
+      return crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt,
+          iterations: 150000,
+          hash: "SHA-256",
+        },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
     }
 
-    btnPreview.addEventListener('click', () => {
-      if (!video.src) {
-        alert('Importe d’abord une vidéo.');
+    function concatBuffers(buffers) {
+      let totalLength = 0;
+      for (const b of buffers) totalLength += b.byteLength;
+      const tmp = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const b of buffers) {
+        tmp.set(new Uint8Array(b), offset);
+        offset += b.byteLength;
+      }
+      return tmp.buffer;
+    }
+
+    function toHex(arrBuf) {
+      const bytes = new Uint8Array(arrBuf);
+      return Array.from(bytes)
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    // --- Encryption flow ---
+    async function encryptFile(file, password) {
+      setStatus("Lecture du fichier…");
+      setProgress(10, "Lecture du fichier…");
+
+      const arrayBuffer = await file.arrayBuffer();
+
+      setStatus("Préparation de la clé…");
+      setProgress(30, "Dérivation de la clé…");
+
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await getKeyFromPassword(password, salt);
+
+      setStatus("Chiffrement en cours…");
+      setProgress(60, "Chiffrement du contenu…");
+
+      const encrypted = await crypto.subtle.encrypt(
+        {
+          name: "AES-GCM",
+          iv,
+        },
+        key,
+        arrayBuffer
+      );
+
+      setStatus("Assemblage du fichier chiffré…");
+      setProgress(85, "Assemblage des métadonnées…");
+
+      // Format : [16 octets de sel][12 octets d’IV][données chiffrées]
+      const finalBuffer = concatBuffers([salt.buffer, iv.buffer, encrypted]);
+
+      setProgress(100, "Terminé");
+      setStatus("Chiffrement terminé. Téléchargement de la copie chiffrée.", "success");
+
+      const outName = file.name + ".encrypted";
+      const blob = new Blob([finalBuffer], { type: "application/octet-stream" });
+
+      // Mise à jour des métadonnées affichées
+      metaOutputName.textContent = outName;
+      metaOutputSize.textContent = formatBytes(blob.size);
+      metaSaltIv.textContent =
+        "salt=" + toHex(salt) + " • iv=" + toHex(iv);
+
+      // Déclenchement du téléchargement
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = outName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // --- Events ---
+    encryptBtn.addEventListener("click", async () => {
+      if (!selectedFile) {
+        setStatus("Choisis d’abord un fichier à chiffrer.", "error");
         return;
       }
-      statusEl.textContent = 'Prévisualisation en cours…';
-      isRendering = true;
-      if (video.paused) video.play();
-      drawFrame();
-    });
-
-    btnPlayPause.addEventListener('click', () => {
-      if (!video.src) return;
-      if (video.paused) {
-        video.play();
-        btnPlayPause.textContent = 'Pause';
-        statusEl.textContent = 'Lecture vidéo…';
-      } else {
-        video.pause();
-        btnPlayPause.textContent = 'Lecture';
-        statusEl.textContent = 'Vidéo en pause.';
-      }
-    });
-
-    btnReset.addEventListener('click', () => {
-      if (!video.src) return;
-      video.currentTime = 0;
-      statusEl.textContent = 'Revenu au début.';
-    });
-
-    btnExport.addEventListener('click', async () => {
-      if (!video.src) {
-        alert('Importe d’abord une vidéo.');
-        return;
-      }
-      if (!canvas.captureStream) {
-        alert("Ton navigateur ne supporte pas la capture du canvas.");
+      const password = passwordInput.value.trim();
+      if (!password) {
+        setStatus("Entre un mot de passe pour chiffrer le fichier.", "error");
         return;
       }
 
-      statusEl.textContent = 'Préparation de l’export…';
+      encryptBtn.disabled = true;
+      clearBtn.disabled = true;
+      setStatus("");
+      setProgress(5, "Initialisation…");
 
-      setupCanvas();
-
-      const stream = canvas.captureStream(30); // 30 fps
-      recordedChunks = [];
       try {
-        recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
-      } catch (e) {
-        try {
-          recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-        } catch (err) {
-          alert("Impossible de créer un MediaRecorder pour ce navigateur.");
-          return;
-        }
+        await encryptFile(selectedFile, password);
+      } catch (err) {
+        console.error(err);
+        setStatus("Erreur pendant le chiffrement. (Mot de passe trop court ? Problème navigateur ?)", "error");
+        setProgress(0, "En attente…");
+      } finally {
+        encryptBtn.disabled = false;
+        clearBtn.disabled = false;
       }
-
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) recordedChunks.push(e.data);
-      };
-
-      recorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'export_overlay.webm';
-        a.click();
-        URL.revokeObjectURL(url);
-        statusEl.textContent = 'Export terminé.';
-        isRecording = false;
-      };
-
-      video.currentTime = 0;
-      await video.play();
-
-      isRendering = true;
-      isRecording = true;
-      drawFrame();
-      recorder.start();
-      statusEl.textContent = 'Export en cours (enregistre toute la vidéo)…';
-
-      const onEnded = () => {
-        if (isRecording && recorder && recorder.state === 'recording') {
-          recorder.stop();
-        }
-        isRendering = false;
-        video.removeEventListener('ended', onEnded);
-      };
-      video.addEventListener('ended', onEnded);
     });
+
+    clearBtn.addEventListener("click", () => {
+      resetUI(true);
+    });
+
+    // Init
+    resetUI(true);
   </script>
 </body>
 </html>
