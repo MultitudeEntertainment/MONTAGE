@@ -7,708 +7,205 @@
   <style>
     :root {
       --bg: #020617;
-      --bg-panel: #0b1220;
+      --panel: #0b1220;
       --accent: #38bdf8;
-      --accent-soft: rgba(56,189,248,0.15);
-      --accent-strong: #6366f1;
+      --accent2: #6366f1;
       --text: #e5e7eb;
-      --text-soft: #9ca3af;
+      --soft: #9ca3af;
       --danger: #f97373;
       --radius: 14px;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     body {
+      min-height: 100vh;
       background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
       color: var(--text);
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
     }
-
     .app {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1000px;
       background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
-      border-radius: 24px;
-      box-shadow:
-        0 24px 80px rgba(15,23,42,0.9),
-        0 0 0 1px rgba(148,163,184,0.15);
-      padding: 18px 16px 20px;
+      border-radius: 22px;
+      box-shadow: 0 24px 80px rgba(15,23,42,0.9), 0 0 0 1px rgba(148,163,184,0.15);
+      padding: 18px 16px 18px;
       display: flex;
       flex-direction: column;
       gap: 14px;
     }
-
     @media (min-width: 900px) {
-      .app {
-        padding: 22px 22px 24px;
-        gap: 18px;
-      }
+      .app { padding: 22px 22px 22px; gap: 16px; }
     }
-
-    .header {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-size: 1.4rem;
-      letter-spacing: 0.03em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .header { display: flex; flex-direction: column; gap: 6px; }
+    .title-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    h1 { font-size: 1.35rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.03em; }
     .badge {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      color: var(--text-soft);
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+      padding: 3px 8px; border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5); color: var(--soft);
     }
-
-    .subtitle {
-      font-size: 0.85rem;
-      color: var(--text-soft);
-      max-width: 620px;
-    }
-
-    .top-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .settings-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: rgba(15,23,42,0.9);
-      color: var(--text-soft);
-      padding: 6px 10px;
-      font-size: 0.8rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
-    }
-
-    .settings-btn:hover {
-      background: rgba(15,23,42,1);
-      border-color: var(--accent);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
+    .subtitle { font-size: 0.85rem; color: var(--soft); max-width: 620px; }
     .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      display: flex; flex-wrap: wrap; gap: 6px;
       border-radius: 999px;
       background: rgba(15,23,42,0.9);
       padding: 4px;
       border: 1px solid rgba(30,64,175,0.7);
     }
-
     .tab-btn {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 14px;
-      font-size: 0.82rem;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+      border-radius: 999px; border: none;
+      padding: 6px 14px; font-size: 0.82rem;
+      cursor: pointer; background: transparent; color: var(--soft);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background 0.15s, color 0.15s, transform 0.1s;
     }
-
-    .tab-btn span.icon {
-      font-size: 0.9rem;
-    }
-
     .tab-btn.active {
-      background: linear-gradient(135deg, #38bdf8, #6366f1);
-      color: #0b1120;
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0b1120; transform: translateY(-1px);
     }
-
-    .tab-btn:not(.active):hover {
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
-    .main {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
+    .tab-btn:not(.active):hover { color: var(--text); transform: translateY(-1px); }
+    .main { display: grid; grid-template-columns: 1fr; gap: 14px; }
     @media (min-width: 900px) {
-      .main {
-        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-        gap: 16px;
-      }
+      .main { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; }
     }
-
     .panel {
-      background: radial-gradient(circle at top left, rgba(56,189,248,0.12), transparent 55%),
-                  radial-gradient(circle at bottom right, rgba(129,140,248,0.12), transparent 55%),
-                  var(--bg-panel);
+      background: var(--panel);
       border-radius: var(--radius);
-      padding: 14px 14px 16px;
       border: 1px solid rgba(148,163,184,0.25);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
+      padding: 14px 14px 16px;
+      display: flex; flex-direction: column; gap: 10px;
     }
-
-    @media (min-width: 900px) {
-      .panel {
-        padding: 16px 16px 18px;
-      }
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 60%);
-      opacity: 0.4;
-      pointer-events: none;
-      mix-blend-mode: screen;
-    }
-
-    .panel-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .panel-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .panel-subtitle {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-    }
-
+    @media (min-width: 900px) { .panel { padding: 16px 16px 18px; } }
+    .panel-title { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--soft); }
+    .panel-sub { font-size: 0.8rem; color: var(--soft); margin-top: 2px; }
     .dropzone {
       border-radius: 14px;
       border: 1px dashed rgba(148,163,184,0.7);
-      background: rgba(15,23,42,0.85);
+      background: rgba(15,23,42,0.9);
       padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.18s ease, background 0.18s ease, transform 0.12s ease;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; text-align: center; cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.12s;
     }
-
-    .dropzone:hover {
-      border-color: var(--accent);
-      background: rgba(15,23,42,0.95);
-      transform: translateY(-1px);
-    }
-
+    .dropzone:hover { border-color: var(--accent); background: rgba(15,23,42,1); transform: translateY(-1px); }
     .dropzone.dragover {
       border-color: var(--accent);
       background: rgba(15,23,42,1);
       box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
     }
-
-    .drop-main {
-      font-size: 0.9rem;
-    }
-
-    .drop-main span {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .drop-sub {
-      font-size: 0.78rem;
-      color: var(--text-soft);
-    }
-
-    .file-input {
-      display: none;
-    }
-
+    .file-input { display: none; }
+    .drop-main { font-size: 0.9rem; }
+    .drop-main span { color: var(--accent); font-weight: 500; }
+    .drop-sub { font-size: 0.78rem; color: var(--soft); }
     .file-info {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
+      font-size: 0.8rem; color: var(--soft);
+      display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
     }
-
-    .file-name {
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .file-size {
-      opacity: 0.8;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .field-label {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .field-label span {
-      font-size: 0.7rem;
-      opacity: 0.8;
-    }
-
+    .file-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-size { opacity: 0.8; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field-label { font-size: 0.8rem; color: var(--soft); display: flex; justify-content: space-between; gap: 8px; }
+    .field-label span { font-size: 0.7rem; opacity: 0.8; }
     .input {
-      width: 100%;
-      border-radius: 999px;
+      width: 100%; border-radius: 999px;
       border: 1px solid rgba(148,163,184,0.6);
       background: rgba(15,23,42,0.9);
       color: var(--text);
-      padding: 8px 12px;
-      font-size: 0.85rem;
+      padding: 8px 12px; font-size: 0.85rem;
       outline: none;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
     }
-
     .input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
       background: rgba(15,23,42,1);
     }
-
-    .input::placeholder {
-      color: rgba(148,163,184,0.8);
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
+    .input::placeholder { color: rgba(148,163,184,0.8); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
     .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s ease, opacity 0.12s ease;
+      border-radius: 999px; border: none;
+      padding: 7px 14px; font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.18s, opacity 0.12s;
       white-space: nowrap;
     }
-
     .btn-primary {
-      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #0b1120;
-      box-shadow:
-        0 10px 30px rgba(56,189,248,0.45),
-        0 0 0 1px rgba(15,23,42,0.9);
+      box-shadow: 0 10px 30px rgba(56,189,248,0.45);
     }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 14px 40px rgba(56,189,248,0.55),
-        0 0 0 1px rgba(15,23,42,0.9);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow:
-        0 6px 18px rgba(56,189,248,0.4),
-        0 0 0 1px rgba(15,23,42,0.9);
-    }
-
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 40px rgba(56,189,248,0.55); }
     .btn-ghost {
       background: rgba(15,23,42,0.9);
-      color: var(--text-soft);
+      color: var(--soft);
       border: 1px solid rgba(148,163,184,0.5);
     }
-
-    .btn-ghost:hover {
-      background: rgba(15,23,42,1);
-      color: var(--text);
-    }
-
+    .btn-ghost:hover { background: rgba(15,23,42,1); color: var(--text); }
     .btn-danger {
       background: rgba(127,29,29,0.9);
       color: #fee2e2;
       border: 1px solid rgba(248,113,113,0.7);
     }
-
-    .btn-danger:hover {
-      background: rgba(153,27,27,1);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: default;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .status {
-      font-size: 0.78rem;
-      color: var(--text-soft);
-      min-height: 1.1em;
-    }
-
-    .status.error {
-      color: var(--danger);
-    }
-
-    .status.success {
-      color: #4ade80;
-    }
-
-    .progress-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
+    .btn-danger:hover { background: rgba(153,27,27,1); }
+    .btn:disabled { opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
+    .status { font-size: 0.78rem; color: var(--soft); min-height: 1.1em; }
+    .status.error { color: var(--danger); }
+    .status.success { color: #4ade80; }
     .progress-bar {
-      width: 100%;
-      height: 6px;
+      width: 100%; height: 6px;
       border-radius: 999px;
       background: rgba(15,23,42,0.9);
-      overflow: hidden;
       border: 1px solid rgba(30,64,175,0.8);
+      overflow: hidden;
     }
-
     .progress-inner {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       border-radius: inherit;
-      background: linear-gradient(90deg, #38bdf8, #6366f1);
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
       transition: width 0.15s ease;
     }
-
     .progress-label {
-      font-size: 0.75rem;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
+      font-size: 0.75rem; color: var(--soft);
+      display: flex; justify-content: space-between; gap: 8px;
     }
-
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 0.7rem;
-    }
-
-    .chip {
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--text-soft);
-    }
-
-    .chip-accent {
-      border-color: rgba(56,189,248,0.7);
-      color: var(--accent);
-      background: var(--accent-soft);
-    }
-
-    .meta {
-      font-size: 0.78rem;
-      color: var(--text-soft);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .meta-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .meta-key {
-      opacity: 0.8;
-    }
-
+    .meta { font-size: 0.78rem; color: var(--soft); display: flex; flex-direction: column; gap: 4px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .meta-key { opacity: 0.8; }
     .meta-value {
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.75rem;
-      color: #e0f2fe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.75rem; color: #e0f2fe;
     }
+    .hidden { display: none !important; }
 
-    .footer {
-      font-size: 0.72rem;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-      border-top: 1px solid rgba(30,64,175,0.6);
-      padding-top: 8px;
-      margin-top: 4px;
-    }
-
-    .footer span {
-      opacity: 0.9;
-    }
-
-    .footer strong {
-      font-weight: 600;
-      color: #e0f2fe;
-    }
-
-    /* Coffre-fort */
-
+    /* Coffre */
+    .vault-toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; font-size: 0.8rem; }
+    .vault-search { flex: 1; min-width: 140px; }
     .vault-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      max-height: 260px;
+      margin-top: 6px;
+      max-height: 240px;
       overflow: auto;
-      padding-right: 4px;
+      display: flex; flex-direction: column; gap: 6px;
     }
-
-    .vault-empty {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      opacity: 0.9;
-    }
-
+    .vault-empty { font-size: 0.8rem; color: var(--soft); }
     .vault-item {
       border-radius: 10px;
       border: 1px solid rgba(148,163,184,0.4);
       background: rgba(15,23,42,0.9);
       padding: 6px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      display: flex; flex-direction: column; gap: 4px;
       font-size: 0.78rem;
-    }
-
-    .vault-item-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .vault-item-name {
-      font-weight: 500;
-      max-width: 260px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .vault-item-meta {
-      color: var(--text-soft);
-      font-size: 0.72rem;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .vault-item-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .vault-badge {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      color: var(--text-soft);
-    }
-
-    .vault-master-info {
-      font-size: 0.78rem;
-      color: var(--text-soft);
-    }
-
-    .vault-master-warning {
-      font-size: 0.78rem;
-      color: #facc15;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* Modale paramètres */
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-    }
-
-    .modal {
-      width: 100%;
-      max-width: 520px;
-      background: #020617;
-      border-radius: 18px;
-      border: 1px solid rgba(148,163,184,0.5);
-      box-shadow:
-        0 24px 80px rgba(15,23,42,0.9),
-        0 0 0 1px rgba(15,23,42,0.9);
-      padding: 14px 16px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .modal-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .modal-section-title {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-soft);
-      margin-top: 4px;
-    }
-
-    .modal-section {
-      border-radius: 12px;
-      border: 1px solid rgba(30,64,175,0.7);
-      background: rgba(15,23,42,0.9);
-      padding: 8px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 0.8rem;
-    }
-
-    .modal-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .modal-label {
-      color: var(--text-soft);
-      font-size: 0.78rem;
-    }
-
-    .modal-value {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.75rem;
-      color: #e0f2fe;
-    }
-
-    .toggle {
-      position: relative;
-      width: 38px;
-      height: 20px;
-      border-radius: 999px;
-      background: rgba(15,23,42,1);
-      border: 1px solid rgba(148,163,184,0.7);
       cursor: pointer;
-      flex-shrink: 0;
+      transition: border-color 0.15s, background 0.15s;
     }
-
-    .toggle-thumb {
-      position: absolute;
-      top: 1px;
-      left: 1px;
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-
-    .toggle.on {
-      background: linear-gradient(135deg, #38bdf8, #6366f1);
-      border-color: transparent;
-    }
-
-    .toggle.on .toggle-thumb {
-      transform: translateX(16px);
-      background: #0b1120;
-    }
-
+    .vault-item:hover { border-color: var(--accent); background: rgba(15,23,42,1); }
+    .vault-item.selected { border-color: var(--accent2); box-shadow: 0 0 0 1px rgba(99,102,241,0.7); }
+    .vault-item-header { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .vault-item-name { font-weight: 500; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .vault-item-meta { font-size: 0.72rem; color: var(--soft); }
+    .vault-item-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
     .preview-frame {
       border-radius: 10px;
       border: 1px solid rgba(30,64,175,0.7);
@@ -718,16 +215,15 @@
       overflow: auto;
       font-size: 0.8rem;
     }
-
     .preview-frame img,
-    .preview-frame video {
-      max-width: 100%;
-      border-radius: 8px;
-    }
+    .preview-frame video { max-width: 100%; border-radius: 8px; }
+    .preview-placeholder { font-size: 0.78rem; color: var(--soft); }
 
-    .preview-placeholder {
-      font-size: 0.78rem;
-      color: var(--text-soft);
+    .footer {
+      font-size: 0.72rem; color: var(--soft);
+      display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+      border-top: 1px solid rgba(30,64,175,0.6);
+      padding-top: 6px;
     }
   </style>
 </head>
@@ -736,50 +232,32 @@
     <header class="header">
       <div class="title-row">
         <div>
-          <h1>
-            🔐 Coffre & chiffreur
-            <span class="badge">Client‑side • Aucune donnée envoyée</span>
-          </h1>
+          <h1>🔐 Coffre & chiffreur</h1>
+          <div class="badge">Client‑side • Aucune donnée envoyée</div>
           <p class="subtitle">
-            Chiffre, déchiffre et stocke des fichiers sensibles dans un coffre‑fort local, protégé par un mot de passe maître.
+            Chiffre, déchiffre et stocke des fichiers sensibles dans un coffre local protégé par mot de passe.
           </p>
-        </div>
-        <div class="top-right">
-          <button class="settings-btn" id="settingsBtn">
-            ⚙️ Paramètres
-          </button>
         </div>
       </div>
       <div class="tabs">
-        <button class="tab-btn active" data-tab="encrypt">
-          <span class="icon">🧩</span> Chiffrer
-        </button>
-        <button class="tab-btn" data-tab="decrypt">
-          <span class="icon">🔓</span> Déchiffrer
-        </button>
-        <button class="tab-btn" data-tab="vault">
-          <span class="icon">🗄️</span> Coffre‑fort
-        </button>
+        <button class="tab-btn active" data-tab="encrypt">🧩 Chiffrer</button>
+        <button class="tab-btn" data-tab="decrypt">🔓 Déchiffrer</button>
+        <button class="tab-btn" data-tab="vault">🗄️ Coffre‑fort</button>
       </div>
     </header>
 
     <main class="main">
-      <!-- Colonne gauche : contenu principal selon l’onglet -->
+      <!-- Colonne gauche -->
       <section class="panel">
-        <div class="panel-inner" id="panelEncrypt">
-          <div class="panel-title">
-            <span>Chiffrer un fichier</span>
-            <span class="panel-subtitle">Crée une copie chiffrée (.encrypted) à partir d’un fichier existant.</span>
-          </div>
+        <!-- Chiffrer -->
+        <div id="panelEncrypt">
+          <div class="panel-title">Chiffrer un fichier</div>
+          <div class="panel-sub">Crée une copie chiffrée (.encrypted) sans toucher à l’original.</div>
 
           <label class="dropzone" id="dropzoneEncrypt">
             <input type="file" id="fileInputEncrypt" class="file-input" />
-            <div class="drop-main">
-              <span>Cliquer pour choisir</span> ou déposer un fichier ici
-            </div>
-            <div class="drop-sub">
-              Tous types acceptés (mp4, jpg, pdf, docx, zip, etc.)
-            </div>
+            <div class="drop-main"><span>Cliquer pour choisir</span> ou déposer un fichier</div>
+            <div class="drop-sub">Tous types acceptés (mp4, jpg, pdf, docx, zip, etc.)</div>
           </label>
 
           <div class="file-info" id="fileInfoEncrypt" style="display:none;">
@@ -792,41 +270,26 @@
               Mot de passe
               <span>Servira à déchiffrer plus tard</span>
             </div>
-            <input
-              type="password"
-              id="passwordEncrypt"
-              class="input"
-              placeholder="Choisis un mot de passe solide"
-              autocomplete="new-password"
-            />
+            <input type="password" id="passwordEncrypt" class="input" placeholder="Choisis un mot de passe solide" />
           </div>
 
           <div class="actions">
-            <button type="button" class="btn btn-ghost" id="clearEncrypt">
-              Réinitialiser
-            </button>
-            <button type="button" class="btn btn-primary" id="encryptBtn">
-              Chiffrer &amp; télécharger
-            </button>
+            <button type="button" class="btn btn-ghost" id="clearEncrypt">Réinitialiser</button>
+            <button type="button" class="btn btn-primary" id="encryptBtn">Chiffrer &amp; télécharger</button>
           </div>
 
           <div class="status" id="statusEncrypt"></div>
         </div>
 
-        <div class="panel-inner hidden" id="panelDecrypt">
-          <div class="panel-title">
-            <span>Déchiffrer un fichier</span>
-            <span class="panel-subtitle">Restaure un fichier original à partir d’un .encrypted.</span>
-          </div>
+        <!-- Déchiffrer -->
+        <div id="panelDecrypt" class="hidden">
+          <div class="panel-title">Déchiffrer un fichier</div>
+          <div class="panel-sub">Restaure un fichier original à partir d’un .encrypted.</div>
 
           <label class="dropzone" id="dropzoneDecrypt">
             <input type="file" id="fileInputDecrypt" class="file-input" />
-            <div class="drop-main">
-              <span>Cliquer pour choisir</span> ou déposer un fichier .encrypted ici
-            </div>
-            <div class="drop-sub">
-              Utilise le même mot de passe que lors du chiffrement.
-            </div>
+            <div class="drop-main"><span>Cliquer pour choisir</span> ou déposer un fichier .encrypted</div>
+            <div class="drop-sub">Utilise le même mot de passe que lors du chiffrement.</div>
           </label>
 
           <div class="file-info" id="fileInfoDecrypt" style="display:none;">
@@ -839,82 +302,62 @@
               Mot de passe
               <span>Doit être identique à celui du chiffrement</span>
             </div>
-            <input
-              type="password"
-              id="passwordDecrypt"
-              class="input"
-              placeholder="Entre le mot de passe utilisé"
-              autocomplete="current-password"
-            />
+            <input type="password" id="passwordDecrypt" class="input" placeholder="Entre le mot de passe utilisé" />
           </div>
 
           <div class="actions">
-            <button type="button" class="btn btn-ghost" id="clearDecrypt">
-              Réinitialiser
-            </button>
-            <button type="button" class="btn btn-primary" id="decryptBtn">
-              Déchiffrer &amp; télécharger
-            </button>
+            <button type="button" class="btn btn-ghost" id="clearDecrypt">Réinitialiser</button>
+            <button type="button" class="btn btn-primary" id="decryptBtn">Déchiffrer &amp; télécharger</button>
           </div>
 
           <div class="status" id="statusDecrypt"></div>
         </div>
 
-        <div class="panel-inner hidden" id="panelVault">
-          <div class="panel-title">
-            <span>Coffre‑fort</span>
-            <span class="panel-subtitle">Stocke des fichiers chiffrés localement, accessibles 24h/24 sur ce navigateur.</span>
+        <!-- Coffre -->
+        <div id="panelVault" class="hidden">
+          <div class="panel-title">Coffre‑fort</div>
+          <div class="panel-sub">
+            Stocke des fichiers chiffrés localement (IndexedDB). Accessible 24h/24 sur ce navigateur, avec mot de passe maître.
           </div>
 
-          <div id="vaultIntro" class="vault-master-info">
-            Première utilisation du coffre‑fort : choisis un <strong>mot de passe maître</strong>.  
-            Il servira à protéger tous les fichiers stockés ici. Si tu le perds, les fichiers sont irrécupérables.
+          <div class="status" id="vaultIntro">
+            Première utilisation : choisis un <strong>mot de passe maître</strong>. Si tu le perds, les fichiers sont perdus.
           </div>
 
           <div class="field" id="vaultMasterSetup">
             <div class="field-label">
-              Mot de passe maître du coffre
+              Mot de passe maître
               <span>À retenir absolument</span>
             </div>
-            <input
-              type="password"
-              id="vaultMasterPassword"
-              class="input"
-              placeholder="Crée un mot de passe maître"
-            />
-            <input
-              type="password"
-              id="vaultMasterPasswordConfirm"
-              class="input"
-              placeholder="Confirme le mot de passe maître"
-            />
+            <input type="password" id="vaultMasterPassword" class="input" placeholder="Crée ou entre ton mot de passe maître" />
             <div class="actions">
-              <button type="button" class="btn btn-primary" id="vaultMasterSetBtn">
-                Initialiser le coffre‑fort
-              </button>
+              <button type="button" class="btn btn-primary" id="vaultMasterBtn">Valider</button>
             </div>
           </div>
 
-          <div id="vaultUnlockedSection" class="hidden">
-            <div class="vault-master-info">
-              Coffre‑fort déverrouillé. Tu peux ajouter des fichiers, les prévisualiser ou les restaurer.  
-              <span class="vault-master-warning">Le mot de passe maître n’est jamais stocké. Tu devras le ressaisir à chaque nouvelle visite.</span>
+          <div id="vaultUnlocked" class="hidden">
+            <div class="vault-toolbar">
+              <div class="vault-search">
+                <input type="text" id="vaultSearch" class="input" placeholder="Rechercher dans le coffre…" />
+              </div>
+              <div>
+                <select id="vaultSort" class="input">
+                  <option value="date_desc">Plus récents</option>
+                  <option value="date_asc">Plus anciens</option>
+                  <option value="name_asc">Nom A→Z</option>
+                  <option value="name_desc">Nom Z→A</option>
+                </select>
+              </div>
             </div>
 
             <label class="dropzone" id="dropzoneVault">
               <input type="file" id="fileInputVault" class="file-input" multiple />
-              <div class="drop-main">
-                <span>Cliquer pour ajouter</span> ou déposer des fichiers dans le coffre
-              </div>
-              <div class="drop-sub">
-                Ils seront chiffrés et stockés localement dans ce navigateur.
-              </div>
+              <div class="drop-main"><span>Cliquer pour ajouter</span> ou déposer des fichiers</div>
+              <div class="drop-sub">Ils seront chiffrés et stockés dans ce coffre.</div>
             </label>
 
             <div class="vault-list" id="vaultList">
-              <div class="vault-empty" id="vaultEmpty">
-                Aucun fichier dans le coffre pour l’instant.
-              </div>
+              <div class="vault-empty" id="vaultEmpty">Aucun fichier dans le coffre pour l’instant.</div>
             </div>
           </div>
 
@@ -922,29 +365,16 @@
         </div>
       </section>
 
-      <!-- Colonne droite : progression + métadonnées / aperçu -->
+      <!-- Colonne droite -->
       <section class="panel">
-        <div class="panel-inner" id="sideEncrypt">
-          <div class="panel-title">
-            <span>Progression &amp; détails</span>
+        <!-- Side encrypt -->
+        <div id="sideEncrypt">
+          <div class="panel-title">Progression &amp; détails</div>
+          <div class="progress-bar"><div class="progress-inner" id="progressEncrypt"></div></div>
+          <div class="progress-label">
+            <span id="progressLabelEncrypt">En attente…</span>
+            <span id="progressPercentEncrypt">0%</span>
           </div>
-
-          <div class="progress-wrap">
-            <div class="progress-bar">
-              <div class="progress-inner" id="progressEncrypt"></div>
-            </div>
-            <div class="progress-label">
-              <span id="progressLabelEncrypt">En attente…</span>
-              <span id="progressPercentEncrypt">0%</span>
-            </div>
-          </div>
-
-          <div class="chip-row">
-            <div class="chip chip-accent">AES‑GCM 256 bits</div>
-            <div class="chip">Clé dérivée via PBKDF2</div>
-            <div class="chip">Format : header JSON + sel + IV + données</div>
-          </div>
-
           <div class="meta">
             <div class="meta-row">
               <span class="meta-key">Nom de sortie</span>
@@ -954,34 +384,17 @@
               <span class="meta-key">Taille chiffrée</span>
               <span class="meta-value" id="metaEncryptSize">—</span>
             </div>
-            <div class="meta-row">
-              <span class="meta-key">Sel &amp; IV</span>
-              <span class="meta-value" id="metaEncryptSaltIv">—</span>
-            </div>
           </div>
         </div>
 
-        <div class="panel-inner hidden" id="sideDecrypt">
-          <div class="panel-title">
-            <span>Progression &amp; détails</span>
+        <!-- Side decrypt -->
+        <div id="sideDecrypt" class="hidden">
+          <div class="panel-title">Progression &amp; détails</div>
+          <div class="progress-bar"><div class="progress-inner" id="progressDecrypt"></div></div>
+          <div class="progress-label">
+            <span id="progressLabelDecrypt">En attente…</span>
+            <span id="progressPercentDecrypt">0%</span>
           </div>
-
-          <div class="progress-wrap">
-            <div class="progress-bar">
-              <div class="progress-inner" id="progressDecrypt"></div>
-            </div>
-            <div class="progress-label">
-              <span id="progressLabelDecrypt">En attente…</span>
-              <span id="progressPercentDecrypt">0%</span>
-            </div>
-          </div>
-
-          <div class="chip-row">
-            <div class="chip chip-accent">AES‑GCM 256 bits</div>
-            <div class="chip">Lecture du header JSON</div>
-            <div class="chip">Restauration du nom original</div>
-          </div>
-
           <div class="meta">
             <div class="meta-row">
               <span class="meta-key">Nom restauré</span>
@@ -991,34 +404,17 @@
               <span class="meta-key">Taille déchiffrée</span>
               <span class="meta-value" id="metaDecryptSize">—</span>
             </div>
-            <div class="meta-row">
-              <span class="meta-key">Sel &amp; IV</span>
-              <span class="meta-value" id="metaDecryptSaltIv">—</span>
-            </div>
           </div>
         </div>
 
-        <div class="panel-inner hidden" id="sideVault">
-          <div class="panel-title">
-            <span>Aperçu &amp; infos</span>
+        <!-- Side vault -->
+        <div id="sideVault" class="hidden">
+          <div class="panel-title">Aperçu &amp; infos</div>
+          <div class="progress-bar"><div class="progress-inner" id="progressVault"></div></div>
+          <div class="progress-label">
+            <span id="progressLabelVault">En attente…</span>
+            <span id="progressPercentVault">0%</span>
           </div>
-
-          <div class="progress-wrap">
-            <div class="progress-bar">
-              <div class="progress-inner" id="progressVault"></div>
-            </div>
-            <div class="progress-label">
-              <span id="progressLabelVault">En attente…</span>
-              <span id="progressPercentVault">0%</span>
-            </div>
-          </div>
-
-          <div class="chip-row">
-            <div class="chip chip-accent">Coffre local (IndexedDB)</div>
-            <div class="chip">Mot de passe maître requis</div>
-            <div class="chip">Rien n’est envoyé sur Internet</div>
-          </div>
-
           <div class="meta">
             <div class="meta-row">
               <span class="meta-key">Fichier sélectionné</span>
@@ -1029,14 +425,13 @@
               <span class="meta-value" id="metaVaultSize">—</span>
             </div>
             <div class="meta-row">
-              <span class="meta-key">Date d’ajout</span>
+              <span class="meta-key">Date</span>
               <span class="meta-value" id="metaVaultDate">—</span>
             </div>
           </div>
-
           <div class="preview-frame" id="vaultPreview">
             <div class="preview-placeholder">
-              Sélectionne un fichier dans le coffre pour tenter un aperçu (images, texte, PDF, vidéo selon le navigateur).
+              Sélectionne un fichier dans le coffre pour tenter un aperçu (images, texte, PDF, vidéo).
             </div>
           </div>
         </div>
@@ -1044,90 +439,33 @@
     </main>
 
     <footer class="footer">
-      <span>Les fichiers originaux ne sont jamais modifiés, seules des copies chiffrées sont générées ou stockées.</span>
-      <span><strong>Important :</strong> garde tes mots de passe. Sans eux, les fichiers sont définitivement perdus.</span>
+      <span>Les fichiers originaux ne sont jamais modifiés, seules des copies chiffrées sont créées ou stockées.</span>
+      <span><strong>Important :</strong> sans mot de passe (normal ou maître), les fichiers sont irrécupérables.</span>
     </footer>
   </div>
 
-  <!-- Modale paramètres -->
-  <div class="modal-backdrop hidden" id="settingsModalBackdrop">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">Paramètres</div>
-        <button class="btn btn-ghost" id="settingsCloseBtn">Fermer</button>
-      </div>
-
-      <div class="modal-section">
-        <div class="modal-section-title">Coffre‑fort</div>
-        <div class="modal-row">
-          <div class="modal-label">Changer le mot de passe maître</div>
-          <button class="btn btn-ghost" id="changeMasterBtn">Changer…</button>
-        </div>
-        <div class="modal-row">
-          <div class="modal-label">Effacer tout le coffre‑fort</div>
-          <button class="btn btn-danger" id="wipeVaultBtn">Vider le coffre</button>
-        </div>
-      </div>
-
-      <div class="modal-section">
-        <div class="modal-section-title">Interface</div>
-        <div class="modal-row">
-          <div class="modal-label">Animations légères</div>
-          <div class="toggle on" id="toggleAnimations">
-            <div class="toggle-thumb"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-section">
-        <div class="modal-section-title">Technique</div>
-        <div class="modal-row">
-          <div class="modal-label">Espace utilisé par le coffre</div>
-          <div class="modal-value" id="vaultUsage">—</div>
-        </div>
-        <div class="modal-row">
-          <div class="modal-label">Version du schéma de chiffrement</div>
-          <div class="modal-value">v1 • header JSON + sel + IV + données</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // =========================
-    // Helpers généraux
-    // =========================
+    // Helpers
     function formatBytes(bytes) {
-      if (bytes === 0) return "0 o";
-      const k = 1024;
-      const sizes = ["o", "Ko", "Mo", "Go", "To"];
+      if (!bytes) return "0 o";
+      const k = 1024, sizes = ["o", "Ko", "Mo", "Go", "To"];
       const i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     }
-
-    function setStatus(el, message, type = "") {
-      el.textContent = message || "";
+    function setStatus(el, msg, type = "") {
+      el.textContent = msg || "";
       el.className = "status" + (type ? " " + type : "");
     }
-
     function setProgress(bar, labelEl, percentEl, p, label) {
-      const clamped = Math.max(0, Math.min(100, p));
-      bar.style.width = clamped + "%";
-      if (percentEl) percentEl.textContent = clamped.toFixed(0) + "%";
+      const v = Math.max(0, Math.min(100, p));
+      bar.style.width = v + "%";
+      if (percentEl) percentEl.textContent = v.toFixed(0) + "%";
       if (label && labelEl) labelEl.textContent = label;
     }
-
-    function toHex(arrBuf) {
-      const bytes = new Uint8Array(arrBuf);
-      return Array.from(bytes)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-    }
-
     function concatBuffers(buffers) {
-      let totalLength = 0;
-      for (const b of buffers) totalLength += b.byteLength;
-      const tmp = new Uint8Array(totalLength);
+      let total = 0;
+      for (const b of buffers) total += b.byteLength;
+      const tmp = new Uint8Array(total);
       let offset = 0;
       for (const b of buffers) {
         tmp.set(new Uint8Array(b), offset);
@@ -1135,19 +473,10 @@
       }
       return tmp.buffer;
     }
+    function strToBuf(str) { return new TextEncoder().encode(str).buffer; }
+    function bufToStr(buf) { return new TextDecoder().decode(buf); }
 
-    function stringToArrayBuffer(str) {
-      return new TextEncoder().encode(str).buffer;
-    }
-
-    function arrayBufferToString(buf) {
-      return new TextDecoder().decode(buf);
-    }
-
-    // =========================
-    // Web Crypto helpers
-    // =========================
-    async function deriveKeyFromPassword(password, salt, iterations = 150000) {
+    async function deriveKey(password, salt, iterations = 150000) {
       const enc = new TextEncoder();
       const keyMaterial = await crypto.subtle.importKey(
         "raw",
@@ -1156,14 +485,8 @@
         false,
         ["deriveKey"]
       );
-
       return crypto.subtle.deriveKey(
-        {
-          name: "PBKDF2",
-          salt,
-          iterations,
-          hash: "SHA-256",
-        },
+        { name: "PBKDF2", salt, iterations, hash: "SHA-256" },
         keyMaterial,
         { name: "AES-GCM", length: 256 },
         false,
@@ -1171,27 +494,17 @@
       );
     }
 
-    async function encryptWithPassword(password, dataBuffer, meta = {}) {
+    async function encryptWithPassword(password, dataBuffer, meta) {
       const salt = crypto.getRandomValues(new Uint8Array(16));
       const iv = crypto.getRandomValues(new Uint8Array(12));
-      const key = await deriveKeyFromPassword(password, salt);
+      const key = await deriveKey(password, salt);
 
-      const headerObj = {
-        version: 1,
-        meta,
-      };
-      const headerJson = JSON.stringify(headerObj);
-      const headerBuf = stringToArrayBuffer(headerJson);
-      const headerLen = new Uint32Array([headerBuf.byteLength]); // 4 octets
-
+      const header = { v: 1, meta };
+      const headerBuf = strToBuf(JSON.stringify(header));
+      const headerLen = new Uint32Array([headerBuf.byteLength]);
       const payload = concatBuffers([headerLen.buffer, headerBuf, dataBuffer]);
 
-      const encrypted = await crypto.subtle.encrypt(
-        { name: "AES-GCM", iv },
-        key,
-        payload
-      );
-
+      const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, payload);
       const finalBuffer = concatBuffers([salt.buffer, iv.buffer, encrypted]);
       return { finalBuffer, salt, iv };
     }
@@ -1200,35 +513,19 @@
       const salt = new Uint8Array(encryptedBuffer.slice(0, 16));
       const iv = new Uint8Array(encryptedBuffer.slice(16, 28));
       const cipherData = encryptedBuffer.slice(28);
+      const key = await deriveKey(password, salt);
 
-      const key = await deriveKeyFromPassword(password, salt);
-
-      const decrypted = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv },
-        key,
-        cipherData
-      );
-
+      const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipherData);
       const view = new DataView(decrypted);
       const headerLen = view.getUint32(0, true);
       const headerBuf = decrypted.slice(4, 4 + headerLen);
       const dataBuf = decrypted.slice(4 + headerLen);
-
-      const headerJson = arrayBufferToString(headerBuf);
-      const headerObj = JSON.parse(headerJson);
-
-      return {
-        dataBuffer: dataBuf,
-        header: headerObj,
-        salt,
-        iv,
-      };
+      const header = JSON.parse(bufToStr(headerBuf));
+      return { dataBuffer: dataBuf, header, salt, iv };
     }
 
-    // =========================
-    // Gestion des onglets
-    // =========================
-    const tabButtons = document.querySelectorAll(".tab-btn");
+    // Onglets
+    const tabBtns = document.querySelectorAll(".tab-btn");
     const panelEncrypt = document.getElementById("panelEncrypt");
     const panelDecrypt = document.getElementById("panelDecrypt");
     const panelVault = document.getElementById("panelVault");
@@ -1237,32 +534,18 @@
     const sideVault = document.getElementById("sideVault");
 
     function showTab(tab) {
-      tabButtons.forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.tab === tab);
-      });
-
+      tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
       panelEncrypt.classList.toggle("hidden", tab !== "encrypt");
       panelDecrypt.classList.toggle("hidden", tab !== "decrypt");
       panelVault.classList.toggle("hidden", tab !== "vault");
-
       sideEncrypt.classList.toggle("hidden", tab !== "encrypt");
       sideDecrypt.classList.toggle("hidden", tab !== "decrypt");
       sideVault.classList.toggle("hidden", tab !== "vault");
+      if (tab === "vault") initVault();
     }
+    tabBtns.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
 
-    tabButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const tab = btn.dataset.tab;
-        showTab(tab);
-        if (tab === "vault") {
-          initVaultFlow();
-        }
-      });
-    });
-
-    // =========================
-    // Chiffrement simple
-    // =========================
+    // Chiffrer
     const fileInputEncrypt = document.getElementById("fileInputEncrypt");
     const dropzoneEncrypt = document.getElementById("dropzoneEncrypt");
     const fileInfoEncrypt = document.getElementById("fileInfoEncrypt");
@@ -1277,13 +560,11 @@
     const progressPercentEncrypt = document.getElementById("progressPercentEncrypt");
     const metaEncryptName = document.getElementById("metaEncryptName");
     const metaEncryptSize = document.getElementById("metaEncryptSize");
-    const metaEncryptSaltIv = document.getElementById("metaEncryptSaltIv");
-
-    let selectedFileEncrypt = null;
+    let fileEncrypt = null;
 
     function resetEncrypt(full = false) {
       if (full) {
-        selectedFileEncrypt = null;
+        fileEncrypt = null;
         fileInputEncrypt.value = "";
         fileInfoEncrypt.style.display = "none";
         fileNameEncrypt.textContent = "";
@@ -1291,7 +572,6 @@
         passwordEncrypt.value = "";
         metaEncryptName.textContent = "—";
         metaEncryptSize.textContent = "—";
-        metaEncryptSaltIv.textContent = "—";
       }
       setStatus(statusEncrypt, "");
       setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 0, "En attente…");
@@ -1299,7 +579,7 @@
 
     function handleEncryptFile(file) {
       if (!file) return;
-      selectedFileEncrypt = file;
+      fileEncrypt = file;
       fileInfoEncrypt.style.display = "flex";
       fileNameEncrypt.textContent = file.name;
       fileSizeEncrypt.textContent = formatBytes(file.size);
@@ -1308,92 +588,48 @@
     }
 
     dropzoneEncrypt.addEventListener("click", () => fileInputEncrypt.click());
-    fileInputEncrypt.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      handleEncryptFile(file);
-    });
-
-    ["dragenter", "dragover"].forEach((eventName) => {
-      dropzoneEncrypt.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzoneEncrypt.classList.add("dragover");
-      });
-    });
-
-    ["dragleave", "drop"].forEach((eventName) => {
-      dropzoneEncrypt.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzoneEncrypt.classList.remove("dragover");
-      });
-    });
-
-    dropzoneEncrypt.addEventListener("drop", (e) => {
-      const dt = e.dataTransfer;
-      const file = dt.files && dt.files[0];
-      handleEncryptFile(file);
-    });
+    fileInputEncrypt.addEventListener("change", e => handleEncryptFile(e.target.files[0]));
+    ["dragenter","dragover"].forEach(ev => dropzoneEncrypt.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dropzoneEncrypt.classList.add("dragover");
+    }));
+    ["dragleave","drop"].forEach(ev => dropzoneEncrypt.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dropzoneEncrypt.classList.remove("dragover");
+    }));
+    dropzoneEncrypt.addEventListener("drop", e => handleEncryptFile(e.dataTransfer.files[0]));
 
     encryptBtn.addEventListener("click", async () => {
-      if (!selectedFileEncrypt) {
-        setStatus(statusEncrypt, "Choisis d’abord un fichier à chiffrer.", "error");
-        return;
-      }
-      const password = passwordEncrypt.value.trim();
-      if (!password) {
-        setStatus(statusEncrypt, "Entre un mot de passe pour chiffrer le fichier.", "error");
-        return;
-      }
+      if (!fileEncrypt) { setStatus(statusEncrypt, "Choisis un fichier à chiffrer.", "error"); return; }
+      const pwd = passwordEncrypt.value.trim();
+      if (!pwd) { setStatus(statusEncrypt, "Entre un mot de passe.", "error"); return; }
 
       encryptBtn.disabled = true;
       clearEncrypt.disabled = true;
-      setStatus(statusEncrypt, "");
-      setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 5, "Initialisation…");
-
+      setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 10, "Lecture du fichier…");
       try {
-        setStatus(statusEncrypt, "Lecture du fichier…");
-        setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 15, "Lecture du fichier…");
-        const arrayBuffer = await selectedFileEncrypt.arrayBuffer();
-
-        setStatus(statusEncrypt, "Préparation de la clé…");
-        setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 35, "Dérivation de la clé…");
-
+        const buf = await fileEncrypt.arrayBuffer();
         const meta = {
-          originalName: selectedFileEncrypt.name,
-          originalSize: selectedFileEncrypt.size,
-          mimeType: selectedFileEncrypt.type || "application/octet-stream",
-          timestamp: Date.now(),
+          name: fileEncrypt.name,
+          size: fileEncrypt.size,
+          type: fileEncrypt.type || "application/octet-stream",
+          ts: Date.now()
         };
-
-        setStatus(statusEncrypt, "Chiffrement en cours…");
-        setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 65, "Chiffrement du contenu…");
-
-        const { finalBuffer, salt, iv } = await encryptWithPassword(password, arrayBuffer, meta);
-
-        setStatus(statusEncrypt, "Assemblage du fichier chiffré…");
-        setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 90, "Finalisation…");
-
-        const outName = selectedFileEncrypt.name + ".encrypted";
+        setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 50, "Chiffrement…");
+        const { finalBuffer } = await encryptWithPassword(pwd, buf, meta);
+        const outName = fileEncrypt.name + ".encrypted";
         const blob = new Blob([finalBuffer], { type: "application/octet-stream" });
 
         metaEncryptName.textContent = outName;
         metaEncryptSize.textContent = formatBytes(blob.size);
-        metaEncryptSaltIv.textContent = "salt=" + toHex(salt) + " • iv=" + toHex(iv);
-
         setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 100, "Terminé");
-        setStatus(statusEncrypt, "Chiffrement terminé. Téléchargement de la copie chiffrée.", "success");
+        setStatus(statusEncrypt, "Chiffrement terminé, téléchargement en cours.", "success");
 
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.href = url;
-        a.download = outName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.href = url; a.download = outName;
+        document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.error(e);
         setStatus(statusEncrypt, "Erreur pendant le chiffrement.", "error");
         setProgress(progressEncrypt, progressLabelEncrypt, progressPercentEncrypt, 0, "En attente…");
       } finally {
@@ -1401,16 +637,10 @@
         clearEncrypt.disabled = false;
       }
     });
-
-    clearEncrypt.addEventListener("click", () => {
-      resetEncrypt(true);
-    });
-
+    clearEncrypt.addEventListener("click", () => resetEncrypt(true));
     resetEncrypt(true);
 
-    // =========================
-    // Déchiffrement simple
-    // =========================
+    // Déchiffrer
     const fileInputDecrypt = document.getElementById("fileInputDecrypt");
     const dropzoneDecrypt = document.getElementById("dropzoneDecrypt");
     const fileInfoDecrypt = document.getElementById("fileInfoDecrypt");
@@ -1425,13 +655,11 @@
     const progressPercentDecrypt = document.getElementById("progressPercentDecrypt");
     const metaDecryptName = document.getElementById("metaDecryptName");
     const metaDecryptSize = document.getElementById("metaDecryptSize");
-    const metaDecryptSaltIv = document.getElementById("metaDecryptSaltIv");
-
-    let selectedFileDecrypt = null;
+    let fileDecrypt = null;
 
     function resetDecrypt(full = false) {
       if (full) {
-        selectedFileDecrypt = null;
+        fileDecrypt = null;
         fileInputDecrypt.value = "";
         fileInfoDecrypt.style.display = "none";
         fileNameDecrypt.textContent = "";
@@ -1439,7 +667,6 @@
         passwordDecrypt.value = "";
         metaDecryptName.textContent = "—";
         metaDecryptSize.textContent = "—";
-        metaDecryptSaltIv.textContent = "—";
       }
       setStatus(statusDecrypt, "");
       setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 0, "En attente…");
@@ -1447,7 +674,7 @@
 
     function handleDecryptFile(file) {
       if (!file) return;
-      selectedFileDecrypt = file;
+      fileDecrypt = file;
       fileInfoDecrypt.style.display = "flex";
       fileNameDecrypt.textContent = file.name;
       fileSizeDecrypt.textContent = formatBytes(file.size);
@@ -1456,108 +683,65 @@
     }
 
     dropzoneDecrypt.addEventListener("click", () => fileInputDecrypt.click());
-    fileInputDecrypt.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      handleDecryptFile(file);
-    });
-
-    ["dragenter", "dragover"].forEach((eventName) => {
-      dropzoneDecrypt.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzoneDecrypt.classList.add("dragover");
-      });
-    });
-
-    ["dragleave", "drop"].forEach((eventName) => {
-      dropzoneDecrypt.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzoneDecrypt.classList.remove("dragover");
-      });
-    });
-
-    dropzoneDecrypt.addEventListener("drop", (e) => {
-      const dt = e.dataTransfer;
-      const file = dt.files && dt.files[0];
-      handleDecryptFile(file);
-    });
+    fileInputDecrypt.addEventListener("change", e => handleDecryptFile(e.target.files[0]));
+    ["dragenter","dragover"].forEach(ev => dropzoneDecrypt.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dropzoneDecrypt.classList.add("dragover");
+    }));
+    ["dragleave","drop"].forEach(ev => dropzoneDecrypt.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dropzoneDecrypt.classList.remove("dragover");
+    }));
+    dropzoneDecrypt.addEventListener("drop", e => handleDecryptFile(e.dataTransfer.files[0]));
 
     decryptBtn.addEventListener("click", async () => {
-      if (!selectedFileDecrypt) {
-        setStatus(statusDecrypt, "Choisis d’abord un fichier .encrypted à déchiffrer.", "error");
-        return;
-      }
-      const password = passwordDecrypt.value.trim();
-      if (!password) {
-        setStatus(statusDecrypt, "Entre le mot de passe utilisé lors du chiffrement.", "error");
-        return;
-      }
+      if (!fileDecrypt) { setStatus(statusDecrypt, "Choisis un fichier .encrypted.", "error"); return; }
+      const pwd = passwordDecrypt.value.trim();
+      if (!pwd) { setStatus(statusDecrypt, "Entre le mot de passe utilisé.", "error"); return; }
 
       decryptBtn.disabled = true;
       clearDecrypt.disabled = true;
-      setStatus(statusDecrypt, "");
-      setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 5, "Initialisation…");
-
+      setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 10, "Lecture du fichier…");
       try {
-        setStatus(statusDecrypt, "Lecture du fichier chiffré…");
-        setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 20, "Lecture du fichier…");
-        const arrayBuffer = await selectedFileDecrypt.arrayBuffer();
-
-        setStatus(statusDecrypt, "Dérivation de la clé…");
-        setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 40, "Préparation de la clé…");
-
-        const { dataBuffer, header, salt, iv } = await decryptWithPassword(password, arrayBuffer);
-
+        const buf = await fileDecrypt.arrayBuffer();
+        setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 40, "Déchiffrement…");
+        const { dataBuffer, header } = await decryptWithPassword(pwd, buf);
         const meta = header.meta || {};
-        const originalName = meta.originalName || selectedFileDecrypt.name.replace(/\.encrypted$/i, "");
-        const mimeType = meta.mimeType || "application/octet-stream";
+        const name = meta.name || fileDecrypt.name.replace(/\.encrypted$/i, "");
+        const type = meta.type || "application/octet-stream";
+        const blob = new Blob([dataBuffer], { type });
 
-        setStatus(statusDecrypt, "Reconstruction du fichier…");
-        setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 80, "Finalisation…");
-
-        const blob = new Blob([dataBuffer], { type: mimeType });
-
-        metaDecryptName.textContent = originalName;
+        metaDecryptName.textContent = name;
         metaDecryptSize.textContent = formatBytes(blob.size);
-        metaDecryptSaltIv.textContent = "salt=" + toHex(salt) + " • iv=" + toHex(iv);
-
         setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 100, "Terminé");
-        setStatus(statusDecrypt, "Déchiffrement terminé. Téléchargement du fichier restauré.", "success");
+        setStatus(statusDecrypt, "Déchiffrement terminé, téléchargement en cours.", "success");
 
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.href = url;
-        a.download = originalName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
-      } catch (err) {
-        console.error(err);
-        setStatus(statusDecrypt, "Erreur pendant le déchiffrement (mot de passe incorrect ? fichier corrompu ?).", "error");
+      } catch (e) {
+        console.error(e);
+        setStatus(statusDecrypt, "Erreur pendant le déchiffrement (mot de passe ou fichier).", "error");
         setProgress(progressDecrypt, progressLabelDecrypt, progressPercentDecrypt, 0, "En attente…");
       } finally {
         decryptBtn.disabled = false;
         clearDecrypt.disabled = false;
       }
     });
-
-    clearDecrypt.addEventListener("click", () => {
-      resetDecrypt(true);
-    });
-
+    clearDecrypt.addEventListener("click", () => resetDecrypt(true));
     resetDecrypt(true);
 
-    // =========================
-    // Coffre-fort (IndexedDB)
-    // =========================
+    // Coffre (IndexedDB)
+    const VAULT_DB = "vault_db_v1";
+    const VAULT_STORE = "files";
+    const VAULT_META_KEY = "vault_meta_v1";
+    const VAULT_SESSION_KEY = "vault_session_v1";
+
     const vaultIntro = document.getElementById("vaultIntro");
     const vaultMasterSetup = document.getElementById("vaultMasterSetup");
     const vaultMasterPassword = document.getElementById("vaultMasterPassword");
-    const vaultMasterPasswordConfirm = document.getElementById("vaultMasterPasswordConfirm");
-    const vaultMasterSetBtn = document.getElementById("vaultMasterSetBtn");
-    const vaultUnlockedSection = document.getElementById("vaultUnlockedSection");
+    const vaultMasterBtn = document.getElementById("vaultMasterBtn");
+    const vaultUnlocked = document.getElementById("vaultUnlocked");
     const dropzoneVault = document.getElementById("dropzoneVault");
     const fileInputVault = document.getElementById("fileInputVault");
     const vaultList = document.getElementById("vaultList");
@@ -1570,56 +754,39 @@
     const metaVaultSize = document.getElementById("metaVaultSize");
     const metaVaultDate = document.getElementById("metaVaultDate");
     const vaultPreview = document.getElementById("vaultPreview");
-    const vaultUsage = document.getElementById("vaultUsage");
+    const vaultSearch = document.getElementById("vaultSearch");
+    const vaultSort = document.getElementById("vaultSort");
 
     let vaultDb = null;
-    let vaultMasterKeyPassword = null; // non stocké, juste en mémoire
-    const VAULT_DB_NAME = "secureVaultDB_v1";
-    const VAULT_STORE_NAME = "files";
-    const VAULT_META_KEY = "vault_meta_v1"; // stocké dans localStorage (sel du master)
-
-    function openVaultDB() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(VAULT_DB_NAME, 1);
-        request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains(VAULT_STORE_NAME)) {
-            const store = db.createObjectStore(VAULT_STORE_NAME, { keyPath: "id", autoIncrement: true });
-            store.createIndex("by_date", "date", { unique: false });
-          }
-        };
-        request.onsuccess = (event) => {
-          resolve(event.target.result);
-        };
-        request.onerror = (event) => {
-          reject(event.target.error);
-        };
-      });
-    }
-
-    async function getVaultDB() {
-      if (vaultDb) return vaultDb;
-      vaultDb = await openVaultDB();
-      return vaultDb;
-    }
+    let vaultMasterPwdSession = null;
+    let vaultItems = [];
+    let vaultSelectedId = null;
 
     function getVaultMeta() {
       const raw = localStorage.getItem(VAULT_META_KEY);
       if (!raw) return null;
-      try {
-        return JSON.parse(raw);
-      } catch {
-        return null;
-      }
+      try { return JSON.parse(raw); } catch { return null; }
     }
+    function setVaultMeta(meta) { localStorage.setItem(VAULT_META_KEY, JSON.stringify(meta)); }
 
-    function setVaultMeta(meta) {
-      localStorage.setItem(VAULT_META_KEY, JSON.stringify(meta));
+    function openVaultDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(VAULT_DB, 1);
+        req.onupgradeneeded = e => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(VAULT_STORE)) {
+            const store = db.createObjectStore(VAULT_STORE, { keyPath: "id", autoIncrement: true });
+            store.createIndex("by_date", "date", { unique: false });
+          }
+        };
+        req.onsuccess = e => resolve(e.target.result);
+        req.onerror = e => reject(e.target.error);
+      });
     }
-
-    function hasVaultMaster() {
-      const meta = getVaultMeta();
-      return !!(meta && meta.salt);
+    async function getVaultDB() {
+      if (vaultDb) return vaultDb;
+      vaultDb = await openVaultDB();
+      return vaultDb;
     }
 
     function resetVaultUI() {
@@ -1628,511 +795,344 @@
       metaVaultName.textContent = "—";
       metaVaultSize.textContent = "—";
       metaVaultDate.textContent = "—";
-      vaultPreview.innerHTML = '<div class="preview-placeholder">Sélectionne un fichier dans le coffre pour tenter un aperçu (images, texte, PDF, vidéo selon le navigateur).</div>';
+      vaultPreview.innerHTML = '<div class="preview-placeholder">Sélectionne un fichier dans le coffre pour tenter un aperçu.</div>';
+      vaultSelectedId = null;
     }
 
-    async function initVaultFlow() {
+    async function initVault() {
       resetVaultUI();
-      if (!hasVaultMaster()) {
+      const meta = getVaultMeta();
+      const sessionFlag = sessionStorage.getItem(VAULT_SESSION_KEY);
+
+      if (!meta) {
         vaultIntro.classList.remove("hidden");
         vaultMasterSetup.classList.remove("hidden");
-        vaultUnlockedSection.classList.add("hidden");
-        setStatus(statusVault, "Aucun mot de passe maître défini. Commence par initialiser le coffre‑fort.");
-      } else if (!vaultMasterKeyPassword) {
-        vaultIntro.textContent = "Mot de passe maître requis pour déverrouiller le coffre‑fort.";
+        vaultUnlocked.classList.add("hidden");
+        vaultIntro.innerHTML = 'Première utilisation : choisis un <strong>mot de passe maître</strong>.';
+      } else if (!sessionFlag || !vaultMasterPwdSession) {
         vaultIntro.classList.remove("hidden");
         vaultMasterSetup.classList.remove("hidden");
-        vaultUnlockedSection.classList.add("hidden");
-        vaultMasterPassword.placeholder = "Entre ton mot de passe maître";
-        vaultMasterPasswordConfirm.classList.add("hidden");
-        vaultMasterSetBtn.textContent = "Déverrouiller le coffre‑fort";
-        setStatus(statusVault, "Entre ton mot de passe maître pour accéder au coffre.", "error");
+        vaultUnlocked.classList.add("hidden");
+        vaultIntro.textContent = "Entre ton mot de passe maître pour déverrouiller le coffre (une fois par session).";
       } else {
         vaultIntro.classList.add("hidden");
         vaultMasterSetup.classList.add("hidden");
-        vaultUnlockedSection.classList.remove("hidden");
+        vaultUnlocked.classList.remove("hidden");
         await refreshVaultList();
-        await updateVaultUsage();
       }
     }
 
-    async function verifyOrCreateVaultMaster() {
-      if (!hasVaultMaster()) {
-        const pass1 = vaultMasterPassword.value.trim();
-        const pass2 = vaultMasterPasswordConfirm.value.trim();
-        if (!pass1 || !pass2) {
-          setStatus(statusVault, "Entre et confirme un mot de passe maître.", "error");
-          return;
-        }
-        if (pass1 !== pass2) {
-          setStatus(statusVault, "Les deux mots de passe maître ne correspondent pas.", "error");
-          return;
-        }
-        const salt = crypto.getRandomValues(new Uint8Array(16));
-        setVaultMeta({ salt: Array.from(salt) });
-        vaultMasterKeyPassword = pass1;
-        vaultMasterPassword.value = "";
-        vaultMasterPasswordConfirm.value = "";
-        setStatus(statusVault, "Coffre‑fort initialisé. Mot de passe maître défini.", "success");
-        vaultIntro.classList.add("hidden");
-        vaultMasterSetup.classList.add("hidden");
-        vaultUnlockedSection.classList.remove("hidden");
-        await refreshVaultList();
-        await updateVaultUsage();
-      } else {
-        const pass = vaultMasterPassword.value.trim();
-        if (!pass) {
-          setStatus(statusVault, "Entre ton mot de passe maître.", "error");
-          return;
-        }
-        // On ne peut pas vérifier sans tenter un déchiffrement réel, mais on l’accepte ici.
-        vaultMasterKeyPassword = pass;
-        vaultMasterPassword.value = "";
-        setStatus(statusVault, "Coffre‑fort déverrouillé.", "success");
-        vaultIntro.classList.add("hidden");
-        vaultMasterSetup.classList.add("hidden");
-        vaultUnlockedSection.classList.remove("hidden");
-        await refreshVaultList();
-        await updateVaultUsage();
-      }
-    }
+    vaultMasterBtn.addEventListener("click", () => {
+      const pwd = vaultMasterPassword.value.trim();
+      if (!pwd) { setStatus(statusVault, "Entre un mot de passe maître.", "error"); return; }
 
-    vaultMasterSetBtn.addEventListener("click", () => {
-      verifyOrCreateVaultMaster();
+      const meta = getVaultMeta();
+      if (!meta) {
+        const salt = Array.from(crypto.getRandomValues(new Uint8Array(16)));
+        setVaultMeta({ salt });
+      }
+      vaultMasterPwdSession = pwd;
+      sessionStorage.setItem(VAULT_SESSION_KEY, "1");
+      vaultMasterPassword.value = "";
+      setStatus(statusVault, "Coffre déverrouillé pour cette session.", "success");
+      vaultIntro.classList.add("hidden");
+      vaultMasterSetup.classList.add("hidden");
+      vaultUnlocked.classList.remove("hidden");
+      refreshVaultList();
     });
 
+    async function getVaultMasterKey() {
+      if (!vaultMasterPwdSession) throw new Error("Mot de passe maître non défini.");
+      const meta = getVaultMeta();
+      if (!meta || !meta.salt) throw new Error("Meta coffre manquante.");
+      const salt = new Uint8Array(meta.salt);
+      return deriveKey(vaultMasterPwdSession, salt, 200000);
+    }
+
     dropzoneVault.addEventListener("click", () => fileInputVault.click());
-    fileInputVault.addEventListener("change", async (e) => {
+    fileInputVault.addEventListener("change", async e => {
       const files = Array.from(e.target.files || []);
       if (!files.length) return;
       await addFilesToVault(files);
       fileInputVault.value = "";
     });
-
-    ["dragenter", "dragover"].forEach((eventName) => {
-      dropzoneVault.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzoneVault.classList.add("dragover");
-      });
-    });
-
-    ["dragleave", "drop"].forEach((eventName) => {
-      dropzoneVault.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzoneVault.classList.remove("dragover");
-      });
-    });
-
-    dropzoneVault.addEventListener("drop", async (e) => {
-      const dt = e.dataTransfer;
-      const files = Array.from(dt.files || []);
+    ["dragenter","dragover"].forEach(ev => dropzoneVault.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dropzoneVault.classList.add("dragover");
+    }));
+    ["dragleave","drop"].forEach(ev => dropzoneVault.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dropzoneVault.classList.remove("dragover");
+    }));
+    dropzoneVault.addEventListener("drop", async e => {
+      const files = Array.from(e.dataTransfer.files || []);
       if (!files.length) return;
       await addFilesToVault(files);
     });
 
-    async function getVaultMasterSalt() {
-      const meta = getVaultMeta();
-      if (!meta || !meta.salt) throw new Error("Pas de sel de coffre‑fort.");
-      return new Uint8Array(meta.salt);
-    }
-
-    async function getVaultMasterKey() {
-      if (!vaultMasterKeyPassword) throw new Error("Mot de passe maître non défini.");
-      const salt = await getVaultMasterSalt();
-      return deriveKeyFromPassword(vaultMasterKeyPassword, salt, 200000);
-    }
-
     async function addFilesToVault(files) {
-      if (!vaultMasterKeyPassword) {
-        setStatus(statusVault, "Déverrouille d’abord le coffre‑fort avec ton mot de passe maître.", "error");
-        return;
-      }
+      if (!vaultMasterPwdSession) { setStatus(statusVault, "Déverrouille d’abord le coffre.", "error"); return; }
       const db = await getVaultDB();
-      const tx = db.transaction(VAULT_STORE_NAME, "readwrite");
-      const store = tx.objectStore(VAULT_STORE_NAME);
+      const tx = db.transaction(VAULT_STORE, "readwrite");
+      const store = tx.objectStore(VAULT_STORE);
+      const key = await getVaultMasterKey();
 
-      let processed = 0;
+      let done = 0;
       for (const file of files) {
-        setStatus(statusVault, `Chiffrement de "${file.name}"…`);
-        setProgress(progressVault, progressLabelVault, progressPercentVault, 10 + (processed / files.length) * 80, "Chiffrement…");
-        const arrayBuffer = await file.arrayBuffer();
+        setProgress(progressVault, progressLabelVault, progressPercentVault, 10 + (done / files.length) * 70, "Chiffrement…");
+        const buf = await file.arrayBuffer();
 
-        const masterKey = await getVaultMasterKey();
         const salt = crypto.getRandomValues(new Uint8Array(16));
         const iv = crypto.getRandomValues(new Uint8Array(12));
 
-        const headerObj = {
-          version: 1,
+        const header = {
+          v: 1,
           meta: {
-            originalName: file.name,
-            originalSize: file.size,
-            mimeType: file.type || "application/octet-stream",
-            timestamp: Date.now(),
-            vault: true,
-          },
+            name: file.name,
+            size: file.size,
+            type: file.type || "application/octet-stream",
+            ts: Date.now()
+          }
         };
-        const headerJson = JSON.stringify(headerObj);
-        const headerBuf = stringToArrayBuffer(headerJson);
+        const headerBuf = strToBuf(JSON.stringify(header));
         const headerLen = new Uint32Array([headerBuf.byteLength]);
-        const payload = concatBuffers([headerLen.buffer, headerBuf, arrayBuffer]);
+        const payload = concatBuffers([headerLen.buffer, headerBuf, buf]);
 
-        const encrypted = await crypto.subtle.encrypt(
-          { name: "AES-GCM", iv },
-          masterKey,
-          payload
-        );
-
+        const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, payload);
         const finalBuffer = concatBuffers([salt.buffer, iv.buffer, encrypted]);
 
         const record = {
           name: file.name,
           size: file.size,
-          mimeType: file.type || "application/octet-stream",
+          type: file.type || "application/octet-stream",
           date: Date.now(),
           salt: Array.from(salt),
           iv: Array.from(iv),
-          data: finalBuffer,
+          data: finalBuffer
         };
 
-        await new Promise((resolve, reject) => {
-          const req = store.add(record);
-          req.onsuccess = () => resolve();
-          req.onerror = (e) => reject(e.target.error);
+        await new Promise((res, rej) => {
+          const r = store.add(record);
+          r.onsuccess = () => res();
+          r.onerror = e => rej(e.target.error);
         });
-
-        processed++;
+        done++;
       }
-
       await tx.complete;
-      setStatus(statusVault, "Fichiers ajoutés au coffre‑fort.", "success");
+      setStatus(statusVault, "Fichiers ajoutés au coffre.", "success");
       setProgress(progressVault, progressLabelVault, progressPercentVault, 100, "Terminé");
       await refreshVaultList();
-      await updateVaultUsage();
     }
 
     async function refreshVaultList() {
       const db = await getVaultDB();
-      const tx = db.transaction(VAULT_STORE_NAME, "readonly");
-      const store = tx.objectStore(VAULT_STORE_NAME);
+      const tx = db.transaction(VAULT_STORE, "readonly");
+      const store = tx.objectStore(VAULT_STORE);
       const index = store.index("by_date");
-
-      vaultList.innerHTML = "";
-      let hasAny = false;
-
-      await new Promise((resolve, reject) => {
-        const req = index.openCursor(null, "prev");
-        req.onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            hasAny = true;
-            const item = cursor.value;
-            const el = document.createElement("div");
-            el.className = "vault-item";
-            el.dataset.id = item.id;
-
-            const header = document.createElement("div");
-            header.className = "vault-item-header";
-
-            const nameEl = document.createElement("div");
-            nameEl.className = "vault-item-name";
-            nameEl.textContent = item.name;
-
-            const badge = document.createElement("div");
-            badge.className = "vault-badge";
-            badge.textContent = formatBytes(item.size);
-
-            header.appendChild(nameEl);
-            header.appendChild(badge);
-
-            const metaRow = document.createElement("div");
-            metaRow.className = "vault-item-meta";
-            const dateStr = new Date(item.date).toLocaleString();
-            metaRow.textContent = dateStr + " • " + (item.mimeType || "application/octet-stream");
-
-            const actions = document.createElement("div");
-            actions.className = "vault-item-actions";
-
-            const btnPreview = document.createElement("button");
-            btnPreview.className = "btn btn-ghost";
-            btnPreview.textContent = "Aperçu";
-            btnPreview.addEventListener("click", () => {
-              selectVaultItem(item);
-              previewVaultItem(item);
-            });
-
-            const btnDownload = document.createElement("button");
-            btnDownload.className = "btn btn-primary";
-            btnDownload.textContent = "Restaurer";
-            btnDownload.addEventListener("click", () => {
-              selectVaultItem(item);
-              restoreVaultItem(item);
-            });
-
-            const btnDelete = document.createElement("button");
-            btnDelete.className = "btn btn-danger";
-            btnDelete.textContent = "Supprimer";
-            btnDelete.addEventListener("click", async () => {
-              await deleteVaultItem(item.id);
-              await refreshVaultList();
-              await updateVaultUsage();
-            });
-
-            actions.appendChild(btnPreview);
-            actions.appendChild(btnDownload);
-            actions.appendChild(btnDelete);
-
-            el.appendChild(header);
-            el.appendChild(metaRow);
-            el.appendChild(actions);
-
-            vaultList.appendChild(el);
-
-            cursor.continue();
-          } else {
-            resolve();
-          }
+      vaultItems = [];
+      await new Promise((res, rej) => {
+        const req = index.openCursor();
+        req.onsuccess = e => {
+          const cursor = e.target.result;
+          if (cursor) { vaultItems.push(cursor.value); cursor.continue(); }
+          else res();
         };
-        req.onerror = (e) => reject(e.target.error);
+        req.onerror = e => rej(e.target.error);
+      });
+      renderVaultList();
+    }
+
+    function renderVaultList() {
+      vaultList.innerHTML = "";
+      let items = [...vaultItems];
+      const q = vaultSearch.value.trim().toLowerCase();
+      if (q) items = items.filter(i => i.name.toLowerCase().includes(q));
+
+      const sort = vaultSort.value;
+      items.sort((a,b) => {
+        if (sort === "date_desc") return b.date - a.date;
+        if (sort === "date_asc") return a.date - b.date;
+        if (sort === "name_asc") return a.name.localeCompare(b.name);
+        if (sort === "name_desc") return b.name.localeCompare(a.name);
+        return 0;
       });
 
-      if (!hasAny) {
-        vaultList.appendChild(vaultEmpty);
+      if (!items.length) {
         vaultEmpty.classList.remove("hidden");
-      } else {
-        vaultEmpty.classList.add("hidden");
+        vaultList.appendChild(vaultEmpty);
+        return;
+      }
+      vaultEmpty.classList.add("hidden");
+
+      for (const item of items) {
+        const el = document.createElement("div");
+        el.className = "vault-item";
+        el.dataset.id = item.id;
+        if (item.id === vaultSelectedId) el.classList.add("selected");
+
+        const header = document.createElement("div");
+        header.className = "vault-item-header";
+        const nameEl = document.createElement("div");
+        nameEl.className = "vault-item-name";
+        nameEl.textContent = item.name;
+        const sizeEl = document.createElement("div");
+        sizeEl.textContent = formatBytes(item.size);
+        header.appendChild(nameEl);
+        header.appendChild(sizeEl);
+
+        const meta = document.createElement("div");
+        meta.className = "vault-item-meta";
+        meta.textContent = new Date(item.date).toLocaleString() + " • " + (item.type || "application/octet-stream");
+
+        const actions = document.createElement("div");
+        actions.className = "vault-item-actions";
+
+        const btnPreview = document.createElement("button");
+        btnPreview.className = "btn btn-ghost";
+        btnPreview.textContent = "Aperçu";
+        btnPreview.addEventListener("click", e => {
+          e.stopPropagation();
+          selectVaultItem(item);
+          previewVaultItem(item);
+        });
+
+        const btnRestore = document.createElement("button");
+        btnRestore.className = "btn btn-primary";
+        btnRestore.textContent = "Restaurer";
+        btnRestore.addEventListener("click", e => {
+          e.stopPropagation();
+          selectVaultItem(item);
+          restoreVaultItem(item);
+        });
+
+        const btnDelete = document.createElement("button");
+        btnDelete.className = "btn btn-danger";
+        btnDelete.textContent = "Supprimer";
+        btnDelete.addEventListener("click", async e => {
+          e.stopPropagation();
+          await deleteVaultItem(item.id);
+          await refreshVaultList();
+        });
+
+        actions.appendChild(btnPreview);
+        actions.appendChild(btnRestore);
+        actions.appendChild(btnDelete);
+
+        el.appendChild(header);
+        el.appendChild(meta);
+        el.appendChild(actions);
+
+        el.addEventListener("click", () => selectVaultItem(item));
+        vaultList.appendChild(el);
       }
     }
 
+    vaultSearch.addEventListener("input", renderVaultList);
+    vaultSort.addEventListener("change", renderVaultList);
+
     function selectVaultItem(item) {
+      vaultSelectedId = item.id;
       metaVaultName.textContent = item.name;
       metaVaultSize.textContent = formatBytes(item.size);
       metaVaultDate.textContent = new Date(item.date).toLocaleString();
+      document.querySelectorAll(".vault-item").forEach(el => {
+        el.classList.toggle("selected", Number(el.dataset.id) === item.id);
+      });
     }
 
     async function decryptVaultRecord(record) {
-      if (!vaultMasterKeyPassword) throw new Error("Mot de passe maître non défini.");
-      const masterKey = await getVaultMasterKey();
-
+      const key = await getVaultMasterKey();
       const salt = new Uint8Array(record.salt);
       const iv = new Uint8Array(record.iv);
       const encryptedBuffer = record.data;
+      const cipherData = encryptedBuffer.slice(28);
 
-      const cipherData = encryptedBuffer.slice(28); // 16 sel + 12 iv
-      const decrypted = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv },
-        masterKey,
-        cipherData
-      );
-
+      const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipherData);
       const view = new DataView(decrypted);
       const headerLen = view.getUint32(0, true);
       const headerBuf = decrypted.slice(4, 4 + headerLen);
       const dataBuf = decrypted.slice(4 + headerLen);
-
-      const headerJson = arrayBufferToString(headerBuf);
-      const headerObj = JSON.parse(headerJson);
-
-      return {
-        dataBuffer: dataBuf,
-        header: headerObj,
-        salt,
-        iv,
-      };
+      const header = JSON.parse(bufToStr(headerBuf));
+      return { dataBuffer: dataBuf, header };
     }
 
     async function previewVaultItem(record) {
       try {
-        setStatus(statusVault, "Déchiffrement pour aperçu…");
         setProgress(progressVault, progressLabelVault, progressPercentVault, 40, "Déchiffrement…");
         const { dataBuffer, header } = await decryptVaultRecord(record);
         const meta = header.meta || {};
-        const mimeType = meta.mimeType || record.mimeType || "application/octet-stream";
-        const blob = new Blob([dataBuffer], { type: mimeType });
+        const type = meta.type || record.type || "application/octet-stream";
+        const blob = new Blob([dataBuffer], { type });
         const url = URL.createObjectURL(blob);
 
         vaultPreview.innerHTML = "";
         let content;
-
-        if (mimeType.startsWith("image/")) {
+        if (type.startsWith("image/")) {
           content = document.createElement("img");
           content.src = url;
-        } else if (mimeType.startsWith("video/")) {
+        } else if (type.startsWith("video/")) {
           content = document.createElement("video");
-          content.src = url;
-          content.controls = true;
-        } else if (mimeType === "application/pdf") {
+          content.src = url; content.controls = true;
+        } else if (type === "application/pdf") {
           content = document.createElement("iframe");
-          content.src = url;
-          content.style.width = "100%";
-          content.style.height = "200px";
-        } else if (mimeType.startsWith("text/") || mimeType === "application/json") {
+          content.src = url; content.style.width = "100%"; content.style.height = "200px";
+        } else if (type.startsWith("text/") || type === "application/json") {
           const text = await blob.text();
           content = document.createElement("pre");
-          content.textContent = text.slice(0, 5000);
+          content.textContent = text.slice(0, 4000);
         } else {
           content = document.createElement("div");
           content.className = "preview-placeholder";
-          content.textContent = "Ce type de fichier ne peut pas être prévisualisé ici. Utilise “Restaurer” pour le télécharger.";
+          content.textContent = "Type non prévisualisable ici. Utilise “Restaurer” pour le télécharger.";
         }
-
         vaultPreview.appendChild(content);
-        setStatus(statusVault, "Aperçu généré (dans la limite des capacités du navigateur).", "success");
+        setStatus(statusVault, "Aperçu généré.", "success");
         setProgress(progressVault, progressLabelVault, progressPercentVault, 100, "Terminé");
-      } catch (err) {
-        console.error(err);
-        setStatus(statusVault, "Impossible de déchiffrer pour aperçu (mot de passe maître incorrect ?).", "error");
+      } catch (e) {
+        console.error(e);
+        setStatus(statusVault, "Impossible de déchiffrer pour aperçu (mot de passe maître ?).", "error");
         setProgress(progressVault, progressLabelVault, progressPercentVault, 0, "En attente…");
       }
     }
 
     async function restoreVaultItem(record) {
       try {
-        setStatus(statusVault, "Déchiffrement pour restauration…");
         setProgress(progressVault, progressLabelVault, progressPercentVault, 40, "Déchiffrement…");
         const { dataBuffer, header } = await decryptVaultRecord(record);
         const meta = header.meta || {};
-        const originalName = meta.originalName || record.name;
-        const mimeType = meta.mimeType || record.mimeType || "application/octet-stream";
-        const blob = new Blob([dataBuffer], { type: mimeType });
+        const name = meta.name || record.name;
+        const type = meta.type || record.type || "application/octet-stream";
+        const blob = new Blob([dataBuffer], { type });
 
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.href = url;
-        a.download = originalName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
 
         setStatus(statusVault, "Fichier restauré et téléchargé.", "success");
         setProgress(progressVault, progressLabelVault, progressPercentVault, 100, "Terminé");
-      } catch (err) {
-        console.error(err);
-        setStatus(statusVault, "Impossible de déchiffrer pour restauration (mot de passe maître incorrect ?).", "error");
+      } catch (e) {
+        console.error(e);
+        setStatus(statusVault, "Impossible de déchiffrer pour restauration.", "error");
         setProgress(progressVault, progressLabelVault, progressPercentVault, 0, "En attente…");
       }
     }
 
     async function deleteVaultItem(id) {
       const db = await getVaultDB();
-      const tx = db.transaction(VAULT_STORE_NAME, "readwrite");
-      const store = tx.objectStore(VAULT_STORE_NAME);
-      await new Promise((resolve, reject) => {
-        const req = store.delete(id);
-        req.onsuccess = () => resolve();
-        req.onerror = (e) => reject(e.target.error);
+      const tx = db.transaction(VAULT_STORE, "readwrite");
+      const store = tx.objectStore(VAULT_STORE);
+      await new Promise((res, rej) => {
+        const r = store.delete(id);
+        r.onsuccess = () => res();
+        r.onerror = e => rej(e.target.error);
       });
       await tx.complete;
-      setStatus(statusVault, "Fichier supprimé du coffre‑fort.", "success");
+      if (vaultSelectedId === id) resetVaultUI();
+      setStatus(statusVault, "Fichier supprimé du coffre.", "success");
     }
 
-    async function updateVaultUsage() {
-      const db = await getVaultDB();
-      const tx = db.transaction(VAULT_STORE_NAME, "readonly");
-      const store = tx.objectStore(VAULT_STORE_NAME);
-
-      let total = 0;
-      await new Promise((resolve, reject) => {
-        const req = store.openCursor();
-        req.onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            const item = cursor.value;
-            total += item.data.byteLength || 0;
-            cursor.continue();
-          } else {
-            resolve();
-          }
-        };
-        req.onerror = (e) => reject(e.target.error);
-      });
-
-      vaultUsage.textContent = formatBytes(total);
-    }
-
-    // =========================
-    // Paramètres (modale)
-    // =========================
-    const settingsBtn = document.getElementById("settingsBtn");
-    const settingsModalBackdrop = document.getElementById("settingsModalBackdrop");
-    const settingsCloseBtn = document.getElementById("settingsCloseBtn");
-    const changeMasterBtn = document.getElementById("changeMasterBtn");
-    const wipeVaultBtn = document.getElementById("wipeVaultBtn");
-    const toggleAnimations = document.getElementById("toggleAnimations");
-
-    settingsBtn.addEventListener("click", async () => {
-      settingsModalBackdrop.classList.remove("hidden");
-      await updateVaultUsage();
-    });
-
-    settingsCloseBtn.addEventListener("click", () => {
-      settingsModalBackdrop.classList.add("hidden");
-    });
-
-    settingsModalBackdrop.addEventListener("click", (e) => {
-      if (e.target === settingsModalBackdrop) {
-        settingsModalBackdrop.classList.add("hidden");
-      }
-    });
-
-    toggleAnimations.addEventListener("click", () => {
-      toggleAnimations.classList.toggle("on");
-      // Ici on pourrait activer/désactiver des classes CSS d’animations si besoin.
-    });
-
-    changeMasterBtn.addEventListener("click", async () => {
-      if (!hasVaultMaster()) {
-        alert("Aucun mot de passe maître n’est encore défini. Va dans l’onglet Coffre‑fort pour l’initialiser.");
-        return;
-      }
-      const oldPass = prompt("Ancien mot de passe maître :");
-      if (!oldPass) return;
-      const newPass = prompt("Nouveau mot de passe maître :");
-      if (!newPass) return;
-      const confirmPass = prompt("Confirme le nouveau mot de passe maître :");
-      if (newPass !== confirmPass) {
-        alert("Les deux nouveaux mots de passe ne correspondent pas.");
-        return;
-      }
-      // On ne peut pas re-chiffrer tout le coffre facilement sans tout relire.
-      // Ici, on change simplement le sel et le mot de passe en mémoire.
-      const salt = crypto.getRandomValues(new Uint8Array(16));
-      setVaultMeta({ salt: Array.from(salt) });
-      vaultMasterKeyPassword = newPass;
-      alert("Mot de passe maître mis à jour. Les fichiers existants restent accessibles avec ce nouveau mot de passe.");
-    });
-
-    wipeVaultBtn.addEventListener("click", async () => {
-      if (!confirm("Tu es sûr ? Cela effacera définitivement tous les fichiers du coffre‑fort sur ce navigateur.")) {
-        return;
-      }
-      const db = await getVaultDB();
-      const tx = db.transaction(VAULT_STORE_NAME, "readwrite");
-      const store = tx.objectStore(VAULT_STORE_NAME);
-      await new Promise((resolve, reject) => {
-        const req = store.clear();
-        req.onsuccess = () => resolve();
-        req.onerror = (e) => reject(e.target.error);
-      });
-      await tx.complete;
-      localStorage.removeItem(VAULT_META_KEY);
-      vaultMasterKeyPassword = null;
-      await refreshVaultList();
-      await updateVaultUsage();
-      await initVaultFlow();
-      alert("Coffre‑fort vidé et réinitialisé.");
-    });
-
-    // =========================
     // Init
-    // =========================
-    (async () => {
-      showTab("encrypt");
-      resetVaultUI();
-      // On n’ouvre le coffre qu’à la demande (onglet).
-    })();
+    showTab("encrypt");
   </script>
 </body>
 </html>
